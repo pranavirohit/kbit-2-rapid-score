@@ -10,3 +10,8 @@ scannedKBIT = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Pro
 allKBITimages = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\data_files"
 
 processPDF(scannedKBIT, allKBITimages)
+
+testPage = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\data_files\page_78.png"
+processed = processImage(testPage)
+test = extractAllText(processed)
+print(test)
