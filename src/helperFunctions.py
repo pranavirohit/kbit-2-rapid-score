@@ -64,10 +64,10 @@ Right now, here's what each function does and where I learned how to build them:
     → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 
 - isolateVerticalLines(image):
-     One of the primary helper functions for getVerticalLinesPositions(filePath).
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
     Uses a vertical kernel to extract only the vertical lines using 
     morphological operations (OpenCV's morphologyEx with a tall filter).
-    → https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
+    → Tutorial I learned about kernels from: https://youtu.be/E_NRYxJyZlg
 
 '''
 
