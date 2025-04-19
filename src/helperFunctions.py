@@ -114,7 +114,8 @@ def getVerticalLinesPositions(filePath):
   for line in lines:
     left, top, width, height = cv2.boundingRect(line)
     rectInfo = (left, top, width, height)
-    positions.append(rectInfo)
+    if height > 100: # Add height requirement to docstring
+        positions.append(rectInfo)
   
   return sorted(positions)
 
