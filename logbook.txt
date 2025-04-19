@@ -80,5 +80,30 @@ ae
 2. To use OCR, I need to convert all the PDF pages to their PNG versions -> 
 contain this in processPDF() 
 3. Then, to extract meaningful data, I need to split these PNG images into
-the verbal and nonverbal tables ->
-4. Finally, I need to extract the text 
+the verbal and nonverbal tables
+4. Finally, I need to extract the text
+
+### Splitting Image to Extract Table Data
+1. Assuming I have a PNG of the table file, I want to split it into the three
+tables on the page. I plan to do this by looking for vertical lines:
+
+Verbal (Table 1):
+Start Line: 1, End Line: 3
+
+Verbal (Table 2):
+Start Line: 4, End Line: 6
+
+Nonverbal (Table 3):
+Start Line: 7, End Line: 9
+
+2. Then, I want to find the location for each of the vertical lines
+3. Using the location for each, I want to create three new PNGs, store
+them in a new folder
+4. Then, I want to create an algorithm to extract the text from 
+each of these pages. This is easier, because it's just recognizing
+the same four columns and turning it into a data structure I can run this
+on all the images for. 
+
+
+
+
