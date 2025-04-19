@@ -51,7 +51,6 @@ def processImage(array):
     return processedImage
 
 def extractAllText(image):
-    
     text = pyt.image_to_string(image, config = '--psm 6')
     return text
 
