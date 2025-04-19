@@ -7,3 +7,4 @@ from cmu_graphics import* # CMU graphics
 from pdf2image import convert_from_path #PDF2Image
 
 from helperFunctions import *
+from debuggingFunctions import *

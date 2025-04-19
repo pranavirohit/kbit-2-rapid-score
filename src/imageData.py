@@ -10,4 +10,3 @@ print(getVerticalLinesPositions(testPage))
 # nonVerbalProcessed = processImage(nonVerbalTest)
 # print(extractAllText(verbalProcessed))
 # print(extractAllText(nonVerbalProcessed))
-

@@ -110,7 +110,8 @@ def getVerticalLinesPositions(filePath):
   for line in lines:
     # Get dimensions of line (which is stored as a rectangle)
     left, top, width, height = cv2.boundingRect(line)
-    positions.append(left)
+    rectInfo = (left, top, width, height)
+    positions.append(rectInfo)
   
   return sorted(positions)
 
@@ -128,3 +129,4 @@ def isolateVerticalLines(image):
   # getStructuringElement(shape, (width, height))
   verticalLines = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
   return verticalLines
+
