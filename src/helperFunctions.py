@@ -21,7 +21,13 @@ This file has the main helper functions I'm using to automate KBIT-2 scoring.
   age range from each scoring table page and use it to name the files in a way that's
   more meaningful.
 """
-from commonImports import *
+import cv2 # OpenCV
+import os
+import pytesseract as pyt # Tesseract
+
+from PIL import Image
+from cmu_graphics import* # CMU graphics
+from pdf2image import convert_from_path #PDF2Image
 
 def splitImage(filePath):
     # Read in image and turn into grayscale version
