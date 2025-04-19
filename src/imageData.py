@@ -32,16 +32,29 @@ the same four columns and turning it into a data structure I can run this
 on all the images for.
 '''
 
-def detectVerticalLines(filePath):
-  # Read in image and turn into grayscale version
-  image = cv2.imread(filePath)
-  grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-  _, binaryImage = cv2.threshold(array, 150, 255, cv2.THRESH_BINARY_INV)
+def getVerticalLinesPositions(filePath):
+  threshold = thresholdImage(filePath)
+  # Tutorial: https://www.youtube.com/watch?v=E_NRYxJyZlg
+  # Used this tutorial for an introduction to isolating elements in
+  # OpenCV, then came up with a similar algorithm for my own elements
+  # with vertical lines
 
-  # Tutorial: https://www.youtube.com/watch?v=veoz_46gOkc
-  # Used this tutorial for isolating horizontal lines (see training1.py for code), then on 
-  # my own, came up with a similar algorithm for vertical lines
+  # See my logbook entry for my notes on the tutorial, and how I generated
+  # the algorithm for isolating the vertical lines
+
+
+  kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 50))
+  # getStructuringElement(shape, (width, height))
+
+  verticalLines = cv2.morphologyEx(threshold, cv2.MORPH_OPEN, kernel)
 
   
+def thresholdImage(filePath):
+  # Read in image and turn into grayscale version
+  image = cv2.imread(filePath, 0)
+  grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-  # Continue here
+  # Generates an image with a black background, white lines and text
+  # This is called thresholding, which gives us the mask
+  _, binaryImage = cv2.threshold(array, 150, 255, cv2.THRESH_BINARY_INV)
+  return binaryImage
