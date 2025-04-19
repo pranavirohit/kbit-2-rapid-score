@@ -102,51 +102,54 @@ def extractAllText(image):
 def getTableAge(image):
     pass
 
-# See my notes on algorithim development in logbook.txt
+# See my notes on algorithm development in logbook.txt
 def getVerticalLinesPositions(filePath):
-  imgThreshold = thresholdImage(filePath)
-  imgLinesOnly = isolateVerticalLines(imgThreshold)
+    imgThreshold = thresholdImage(filePath)
+    imgLinesOnly = isolateVerticalLines(imgThreshold)
 
-  lines, _ = cv2.findContours(imgLinesOnly, cv2.RETR_EXTERNAL,
-                              cv2.CHAIN_APPROX_NONE)
-  
-  positions = []
-  for line in lines:
-    left, top, width, height = cv2.boundingRect(line)
-    rectInfo = (left, top, width, height)
-    if height > 100: # Add height requirement to docstring
-        positions.append(rectInfo)
-  
-  return sorted(positions)
+    lines, _ = cv2.findContours(imgLinesOnly, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+    positions = []
+    for line in lines:
+        left, top, width, height = cv2.boundingRect(line)
+        rectInfo = (left, top, width, height)
+        if height > 100:  # Filter out small noise
+            positions.append(rectInfo)
+
+    return sorted(positions)
+
 
 def thresholdImage(filePath):
-  image = cv2.imread(filePath, 0)
-  _, binaryImage = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY_INV)
-  return binaryImage
+    image = cv2.imread(filePath, 0)
+    _, binaryImage = cv2.threshold(image, 150, 255, cv2.THRESH_BINARY_INV)
+    return binaryImage
+
 
 def isolateVerticalLines(image):
-  kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 50))
-  verticalLines = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
-  return verticalLines
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 50))
+    verticalLines = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
+    return verticalLines
+
 
 def splitThreeTables(filePath, linePos):
-   image = cv2.imread(filePath, 0)
-  
-  # Might come back and change x0 = linePos[0], etc. so it's more readable
-   verbal1left = linePos[0]
-   verbal2left = verbal1right = findMidpoint(linePos[2], linePos[3])
-   nonverbal1left = verbal2right = findMidpoint(linePos[5], linePos[6])
-   nonverbal2right = linePos[8]
+    image = cv2.imread(filePath, 0)
 
-   verbal1Array = image[:, verbal1left:verbal1right]
-   verbal2Array = image[:, verbal2left:verbal2right]
-   nonverbalArray = image[:, nonverbal1left:nonverbal2right]
-   
-   verbal1image = processImage(verbal1Array)
-   verbal2image = processImage(verbal2Array)
-   verbal3image = processImage(nonverbalArray)
-   
-   return verbal1image, verbal2image, verbal3image 
-          
+    # Might come back and change x0 = linePos[0], etc. so it's more readable
+    verbal1left = linePos[0]
+    verbal2left = verbal1right = findMidpoint(linePos[2], linePos[3])
+    nonverbal1left = verbal2right = findMidpoint(linePos[5], linePos[6])
+    nonverbal2right = linePos[8]
+
+    verbal1Array = image[:, verbal1left:verbal1right]
+    verbal2Array = image[:, verbal2left:verbal2right]
+    nonverbalArray = image[:, nonverbal1left:nonverbal2right]
+
+    verbal1image = processImage(verbal1Array)
+    verbal2image = processImage(verbal2Array)
+    verbal3image = processImage(nonverbalArray)
+
+    return verbal1image, verbal2image, verbal3image
+
+
 def findMidpoint(line1, line2):
-   return line1 + line2 // 2
+    return (line1 + line2) // 2
