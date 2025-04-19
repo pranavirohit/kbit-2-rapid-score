@@ -24,7 +24,8 @@ I spent most of today debugging the Python environment in VS Code, given
 that I had this setup previously in Google Colab and it's my first time working
 on a program that runs locally. ChatGPT helped me clarify features of VS Code
 and the libraries I installed in VS Code, but the test code for CMU graphics 
-was my own.
+was my own. It also helped me reconfigure my gitHub settings (from my high
+school ID to my CMU ID).
 
 ## Other Resources
 ### OpenCV Installation & Info
