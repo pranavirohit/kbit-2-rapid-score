@@ -19,16 +19,3 @@ def main():
     saveAllKBITPages()
 
 main()
-
-from commonImports import *
-
-# verbalTest, nonVerbalTest = splitImage(testPage)
-
-# Prints out a column of all the vertical lines!!
-print(getVerticalLinesPositions(testPage))
-
-
-# verbalProcessed = processImage(verbalTest)
-# nonVerbalProcessed = processImage(nonVerbalTest)
-# print(extractAllText(verbalProcessed))
-# print(extractAllText(nonVerbalProcessed))

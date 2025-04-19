@@ -151,6 +151,7 @@ def getXCoordinate(positions):
     result = []
     for left, top, width, height in positions:
         result.append(left)
+    return result
     
 def splitThreeTables(filePath, linePos):
     xCoordinates = getXCoordinate(linePos)
