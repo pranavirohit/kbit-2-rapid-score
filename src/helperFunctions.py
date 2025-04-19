@@ -67,8 +67,8 @@ Right now, here's what each function does and where I learned how to build them:
 from commonImports import *
 
 def processPDF(pdfPath, pageOutputFolder, tableOutputFolder):
-    # Reduced dpi to 50 to bound PNG size, as dpi = 300 was too large
-    images = convert_from_path(pdfPath, dpi = 75)
+    # Reduced dpi to 200 to bound PNG size, as dpi = 300 was too large
+    images = convert_from_path(pdfPath, dpi = 200)
     
     for index, image in enumerate(images):
         bookStartingPage = 78 # Corresponds to physical book

@@ -15,6 +15,9 @@ def saveAllKBITPages():
     allKBITtables = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files"
     processPDF(pdfKBIT, allKBITimages, allKBITtables)
 
+    testCroppedPage = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\nonverbal_page_78.png"
+    print(extractAllText(testCroppedPage))
+
 def main():
     saveAllKBITPages()
 
