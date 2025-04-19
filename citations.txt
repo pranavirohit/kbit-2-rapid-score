@@ -7,3 +7,30 @@ In addition, your code must also include citations directly in the code that
 make it clear where you use code that is partly or entirely not of your 
 original design, and what the source is for that code.
 ------------------------------------>
+
+# Friday, April 18th
+
+## AI Assistance
+### ChatGPT by OpenAI
+Prompts Used:
+"How do I install OpenCV on Visual Studio Code?"
+"How do I install Tesseract on Windows?"
+"Why is pytesseract not being recognized in my script?"
+"What does the 'M' next to my file in VS Code mean?"
+"Why is my import line showing as gray?"
+"What's the difference between PowerShell, CMD, and Python?"
+
+I spent most of today debugging the Python environment in VS Code, given 
+that I had this setup previously in Google Colab and it's my first time working
+on a program that runs locally. ChatGPT helped me clarify features of VS Code
+and the libraries I installed in VS Code, but the test code for CMU graphics 
+was my own.
+
+## Other Resources
+### OpenCV Installation & Info
+https://pypi.org/project/opencv-python-headless/
+https://docs.opencv.org/
+
+### Tesseract OCR Windows Installer (UB Mannheim)
+https://digi.bib.uni-mannheim.de/tesseract/
+https://github.com/tesseract-ocr/tesseract
