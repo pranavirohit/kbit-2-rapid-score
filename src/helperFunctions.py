@@ -67,7 +67,8 @@ Right now, here's what each function does and where I learned how to build them:
 from commonImports import *
 
 def processPDF(pdfPath, outputFolder):
-    images = convert_from_path(pdfPath, dpi = 300)
+    # Reduced dpi to 50 to bound PNG size, as dpi = 300 was too large
+    images = convert_from_path(pdfPath, dpi = 75)
     
     for index, image in enumerate(images):
         bookStartingPage = 78 # Corresponds to physical book
@@ -130,15 +131,28 @@ def isolateVerticalLines(image):
     verticalLines = cv2.morphologyEx(image, cv2.MORPH_OPEN, kernel)
     return verticalLines
 
-
+def getXCoordinate(positions):
+    result = []
+    for left, top, width, height in positions:
+        result.append(left)
+    
 def splitThreeTables(filePath, linePos):
+    xCoordinates = getXCoordinate(linePos)
     image = cv2.imread(filePath, 0)
 
+    x0 = xCoordinates[0]
+    x2 = xCoordinates[2]
+    x3 = xCoordinates[3]
+    x5 = xCoordinates[5]
+    x6 = xCoordinates[6]
+    x8 = xCoordinates[8]
+
     # Might come back and change x0 = linePos[0], etc. so it's more readable
-    verbal1left = linePos[0]
-    verbal2left = verbal1right = findMidpoint(linePos[2], linePos[3])
-    nonverbal1left = verbal2right = findMidpoint(linePos[5], linePos[6])
-    nonverbal2right = linePos[8]
+    verbal1left = x0
+    verbal2left = verbal1right = findMidpoint(x2, x3)
+
+    nonverbal1left = verbal2right = findMidpoint(x5, x6)
+    nonverbal2right = x8
 
     verbal1Array = image[:, verbal1left:verbal1right]
     verbal2Array = image[:, verbal2left:verbal2right]
