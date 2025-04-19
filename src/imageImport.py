@@ -21,12 +21,13 @@ age range.)
 from commonImports import *
 
 def saveAllKBITPages():
+    # Please see the resulting images here: https://andrewcmu-my.sharepoint.com/:f:/g/personal/prohit_andrew_cmu_edu/Ep0Xm_xR3JpFlH8T9YF1gBsBzG5KZ6V1T7sMO1jpHC3Xyw?e=DJo26d
+    
     pdfKBIT = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\starter_files\KBIT_Pages_78_84.pdf"
     allKBITimages = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\data_files"
     allKBITtables = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files"
     processPDF(pdfKBIT, allKBITimages, allKBITtables)
 
-    # Please see the resulting images here: 
     testCroppedPage = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\nonverbal_page_78.png"
     
     print(extractAllText(testCroppedPage))
