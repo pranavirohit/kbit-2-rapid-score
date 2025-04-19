@@ -1,5 +1,6 @@
 import cv2
 import pytesseract as pyt
+from pdf2image import convert_from_path #PDF2Image
 
 def processImage(filePath):
     image = cv2.imread(filePath)
@@ -12,3 +13,19 @@ def processImage(filePath):
 def extractAllText(image):
     text = pyt.image_to_string(image, config = '--psm 6')
     return text
+
+def processPDF(pdfPath, outputFolder):
+    # Convert each PDF page to an image
+    images = convert_from_path(pdfPath, dpi = 300)
+
+    # Save each image to the specified output folder by 
+    for index, image in enumerate(images):
+        # age = getTableAge(image)
+        bookStartingPage = 78 # Corresponds to physical book
+        pageNum = index + bookStartingPage
+        fileName = f'page_{pageNum}.png'
+
+
+# Want to eventually name the Table B1 files by their age
+def getTableAge(image):
+    pass
