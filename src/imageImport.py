@@ -1,12 +1,23 @@
-"""
-This script is for one-time setup code.
+'''
+KBIT-2 Page Processor
+This is where I plan to build out the complete data collection pipeline:
+converting the scanned KBIT-2 scoring PDF into individual, labeled table images and
+extracting raw text using OCR. 
 
-Specifically, I'm using it to convert a scanned KBIT-2 PDF into separate
-image files (one per page) using processPDF(). I only need to run this once 
-to generate the image files, which I'll use in other parts of the project.
+Right now, this heavily uses the KBIT-2 Table Processing Helpers to:
+- Convert the scanned PDF (Pages 78–84) into full-page PNGs
+- Crop out individual Verbal and Nonverbal tables from each page
+- Saves all PNGs to the folders on my desktop
+- Runs OCR on one test nonverbal table image and prints the result (for debugging)
 
-Not intended to be part of the core pipeline — just useful for preparing data.
-"""
+I plan to develop two algorithms, one to extract text from the Nonverbal table images,
+and other to extract text from the Verbal table images. I want these functions
+to put this data into a table/array format, and then use this to build
+a dictionary for each table page (as each table page corresponds to a patient
+age range.)
+
+'''
+
 from commonImports import *
 
 def saveAllKBITPages():
@@ -15,7 +26,9 @@ def saveAllKBITPages():
     allKBITtables = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files"
     processPDF(pdfKBIT, allKBITimages, allKBITtables)
 
+    # Please see the resulting images here: 
     testCroppedPage = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\nonverbal_page_78.png"
+    
     print(extractAllText(testCroppedPage))
 
 def main():

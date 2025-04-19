@@ -12,3 +12,77 @@ mdtaylor
  - Designed and coded the main game screen
  - ...
 ------------------------------------>
+
+prohit
+Please see below for a descriptoin of each function I wrote, and the resources I used to learn 
+syntax/become more familar with the libraries I'm using. 
+
+- processPDF(pdfPath, outputFolder):
+    Converts a scanned PDF (starting at page 78 of the book) into high-res PNGs.
+    Saves the full page images and also runs table splitting + saving through the
+    saveTablesFromPage.
+    → https://pypi.org/project/pdf2image/ for installation of libary 
+    → https://pillow.readthedocs.io/en/stable/reference/Image.html for basic PIL syntax
+
+- saveTablesFromPage(filePath, tableOutputFolder, pageNum):
+    Takes a full-page PNG, finds vertical lines, splits the image into Verbal Table 1,
+    Verbal Table 2, and the Nonverbal Table, and saves each as its own PNG.
+    Uses splitThreeTables and getVerticalLinesPositions helper functions.
+
+- splitThreeTables(filePath, linePos):
+    Crops the full PNG image into three separate table images:
+    Verbal Table 1, Verbal Table 2, and Nonverbal Table.
+    Uses midpoints between vertical line positions to crop columns,
+    then processes each cropped region for OCR. Assumes linePos has 
+    at least 9 sorted x-coordinates, mapped to each of the 9 vertical
+    lines in the original table.
+    → This will eventually replace splitImage() with more accurate cropping.
+
+- splitImage(filePath):
+    Splits the page into Verbal and Nonverbal tables by column.
+    I assume a 2:1 layout ratio for now — just enough for early testing.
+    This function will be replaced by the splitThreeTables(filePath, linePos)
+    function which I am currently working on.
+
+- processImage(array):
+    Takes a NumPy array (grayscale) and applies binary thresholding
+    to help Tesseract read it more cleanly. Converts back to a PIL image
+    so Tesseract can process this. I used this for the initial text extraction,
+    which I'm now refining with more recent helper functions.
+    → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html for 
+    introduction to syntax
+
+- extractAllText(image):
+    OCR pass using Tesseract, with PSM 6 (treats it like a single block of text).
+    Works best after thresholding. Decided on PSM 6 because of information below.
+    → https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc#options
+    for deciding which setting to use
+
+- getTableAge(image):
+    Placeholder — I want this to eventually detect age ranges (like 6:0–6:11)
+    so the files are more searchable by range.
+
+- getVerticalLinesPositions(filePath):
+    Isolates all the vertical lines in the image and returns their bounding boxes
+    as (left, top, width, height). Will use these to crop specific tables next.
+    → https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
+    → Tutorial I adapted this from: https://youtu.be/E_NRYxJyZlg
+    → See my notes on algorithim development in logbook.txt for how I used this in my
+    project
+
+- thresholdImage(filePath):
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
+    Just converts an image into black/white (inverted) using thresholding.
+    This creates the binary mask that helps us isolate lines.
+    → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+
+- isolateVerticalLines(image):
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
+    Uses a vertical kernel to extract only the vertical lines using 
+    morphological operations (OpenCV's morphologyEx with a tall filter).
+    → Tutorial I learned about kernels from: https://youtu.be/E_NRYxJyZlg
+
+- debuggingFunctions.py()
+  Opens a KBIT-2 test page and overlays red rectangles on top of all the vertical lines 
+  detected by getVerticalLinesPositions(). Meant to be a quick visual check to confirm if the line 
+  detection is working properly.

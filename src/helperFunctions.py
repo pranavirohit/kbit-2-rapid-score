@@ -8,11 +8,25 @@ clean, labeled PNGs, to isolate just the columns I need and running OCR on them.
 Right now, here's what each function does and where I learned how to build them:
 
 - processPDF(pdfPath, outputFolder):
-    Converts each page of the scanned KBIT-2 PDF into a high-res PNG.
-    It starts from page 78 (based on the book) and saves each image
-    into a folder so I can process them later.
+    Converts a scanned PDF (starting at page 78 of the book) into high-res PNGs.
+    Saves the full page images and also runs table splitting + saving through the
+    saveTablesFromPage.
     → https://pypi.org/project/pdf2image/
     → https://pillow.readthedocs.io/en/stable/reference/Image.html
+
+- saveTablesFromPage(filePath, tableOutputFolder, pageNum):
+    Takes a full-page PNG, finds vertical lines, splits the image into Verbal Table 1,
+    Verbal Table 2, and the Nonverbal Table, and saves each as its own PNG.
+    Uses splitThreeTables and getVerticalLinesPositions helper functions.
+
+- splitThreeTables(filePath, linePos):
+    Crops the full PNG image into three separate table images:
+    Verbal Table 1, Verbal Table 2, and Nonverbal Table.
+    Uses midpoints between vertical line positions to crop columns,
+    then processes each cropped region for OCR. Assumes linePos has 
+    at least 9 sorted x-coordinates, mapped to each of the 9 vertical
+    lines in the original table.
+    → This will eventually replace splitImage() with more accurate cropping.
 
 - splitImage(filePath):
     Splits the page into Verbal and Nonverbal tables by column.
@@ -44,23 +58,16 @@ Right now, here's what each function does and where I learned how to build them:
     → See my notes on algorithim development in logbook.txt
 
 - thresholdImage(filePath):
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
     Just converts an image into black/white (inverted) using thresholding.
     This creates the binary mask that helps us isolate lines.
     → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 
 - isolateVerticalLines(image):
+     One of the primary helper functions for getVerticalLinesPositions(filePath).
     Uses a vertical kernel to extract only the vertical lines using 
     morphological operations (OpenCV's morphologyEx with a tall filter).
     → https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
-
-- splitThreeTables(filePath, linePos):
-    Crops the full PNG image into three separate table images:
-    Verbal Table 1, Verbal Table 2, and Nonverbal Table.
-    Uses midpoints between vertical line positions to crop columns,
-    then processes each cropped region for OCR. Assumes linePos has 
-    at least 9 sorted x-coordinates, mapped to each of the 9 vertical
-    lines in the original table.
-    → This will eventually replace splitImage() with more accurate cropping.
 
 '''
 
@@ -112,7 +119,8 @@ def processImage(array):
 
     return processedImage
 
-def extractAllText(image):
+def extractAllText(filePath):
+    image = PILImage.open(filePath)
     text = pyt.image_to_string(image, config = '--psm 6')
     return text
 
@@ -164,7 +172,6 @@ def splitThreeTables(filePath, linePos):
     x6 = xCoordinates[6]
     x8 = xCoordinates[8]
 
-    # Might come back and change x0 = linePos[0], etc. so it's more readable
     verbal1left = x0
     verbal2left = verbal1right = findMidpoint(x2, x3)
 
