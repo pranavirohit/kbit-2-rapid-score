@@ -42,8 +42,7 @@ def processPDF(pdfPath, outputFolder):
 
 def splitImage(filePath):
     # Read in image and turn into grayscale version
-    image = cv2.imread(filePath)
-    grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    image = cv2.imread(filePath, 0)
     
     # Locate where to split image so I can process the Nonverbal Table and Verbal Table seperately
     height, width = grayImage.shape
@@ -55,11 +54,6 @@ def splitImage(filePath):
 
     return verbalArray, nonVerbalArray
 
-def detectVerticalLines():
-  # Read in image and turn into grayscale version
-  image = cv2.imread(filePath)
-  grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-  # Continue here
 
 def processImage(array):
     _, binaryImage = cv2.threshold(array, 150, 255, cv2.THRESH_BINARY_INV)

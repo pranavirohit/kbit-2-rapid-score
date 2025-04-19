@@ -105,5 +105,26 @@ the same four columns and turning it into a data structure I can run this
 on all the images for. 
 
 
+## Finding Location of Vertical Lines:
+Tutorial: https://www.youtube.com/watch?v=E_NRYxJyZlg
 
+- Mask: Binary black-and-white images, allows us to specify which regions
+we're interested in (usually white)
+- Erosion: Removing elements
+- Dilation: Expanding or growing elements
+- Kernels: What you specify, this is how you decide how to change the image
+to create the mask you want
 
+This is the algorithm I want to implement based on the video:
+
+1. For my project, to split each image, I want to make the vertical lines
+white (this is what I want information on), and the rest of the image, with
+the number values, black
+2. This is just temporarily, because to find the split points, I'm only interested 
+in where the black lines are
+3. I will have to create a kernel that's a thin vertical line, because
+that's the element I want to isolate for this step
+4. Use getStructuringElement, because I want a line, this will be a rectangle
+5. Erode the table image (it'll just be a white screen with black lines,
+these black lines are the table lines)
+6. Get the location of the black lines
