@@ -17,7 +17,10 @@ def redrawAll(app):
     drawCircle(app.width / 2, app.height / 2, app.radius, fill = 'cyan')
 
 def main():
+    testOpenCV()
+    testTesseract()
     runApp()
+
 main()
 
 
