@@ -66,7 +66,7 @@ Right now, here's what each function does and where I learned how to build them:
 
 from commonImports import *
 
-def processPDF(pdfPath, outputFolder):
+def processPDF(pdfPath, pageOutputFolder, tableOutputFolder):
     # Reduced dpi to 50 to bound PNG size, as dpi = 300 was too large
     images = convert_from_path(pdfPath, dpi = 75)
     
@@ -75,11 +75,27 @@ def processPDF(pdfPath, outputFolder):
         pageNum = index + bookStartingPage
         fileName = f'page_{pageNum}.png'
 
-        fullPath = os.path.join(outputFolder, fileName)
-        image.save(fullPath, 'PNG')
+        fullPagePath = os.path.join(pageOutputFolder, fileName)
+        image.save(fullPagePath, 'PNG')
 
-        print(f'Added {fileName} to {fullPath}')
+        print(f'Added {fileName} to {fullPagePath}')
 
+        saveTablesFromPage(fullPagePath, tableOutputFolder, pageNum)
+
+
+def saveTablesFromPage(filePath, tableOutputFolder, pageNum):
+    linePos = getVerticalLinesPositions(filePath)
+    verbal1image, verbal2image, verbal3image = splitThreeTables(filePath, linePos)
+
+    verbal1Path = os.path.join(tableOutputFolder, f"verbal1_page_{pageNum}.png")
+    verbal2Path = os.path.join(tableOutputFolder, f"verbal2_page_{pageNum}.png")
+    nonverbalPath = os.path.join(tableOutputFolder, f"nonverbal_page_{pageNum}.png")
+
+    verbal1image.save(verbal1Path, 'PNG')
+    verbal2image.save(verbal2Path, 'PNG')
+    verbal3image.save(nonverbalPath, 'PNG')
+
+    print(f'Saved cropped tables for page {pageNum} to {tableOutputFolder}')
 
 def splitImage(filePath):
     image = cv2.imread(filePath, 0)

@@ -12,17 +12,11 @@ from commonImports import *
 def saveAllKBITPages():
     pdfKBIT = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\starter_files\KBIT_Pages_78_84.pdf"
     allKBITimages = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\data_files"
-    processPDF(pdfKBIT, allKBITimages)
+    allKBITtables = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files"
+    processPDF(pdfKBIT, allKBITimages, allKBITtables)
 
 def main():
     saveAllKBITPages()
-
-def saveKBITTables():
-    imageList = []
-    testPage = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\data_files\page_78.png"
-    linePos = getVerticalLinesPositions(testPage)
-    verbal1image, verbal2image, verbal3image = splitThreeTables(testPage, linePos)
-
 
 main()
 
