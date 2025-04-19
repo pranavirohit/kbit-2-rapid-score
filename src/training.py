@@ -1,13 +1,13 @@
 # from [fileName] import [functionName]
+import cv2 # Importing OpenCV
+import pytesseract # Importing Tesseract
+from cmu_graphics import* # Importing CMU graphics
 
-# Importing OpenCV
-import cv2
-print(f'OpenCV test: {cv2.__version__}')
+def testOpenCV():
+    print(f'OpenCV test: {cv2.__version__}')
 
-import pytesseract
-
-# Importing CMU graphics
-from cmu_graphics import*
+def testTesseract():
+    print(f'Tesseract test: {pytesseract.get_tesseract_version()}')
 
 def onAppStart(app):
     app.radius = 20
@@ -17,11 +17,8 @@ def redrawAll(app):
     drawCircle(app.width / 2, app.height / 2, app.radius, fill = 'cyan')
 
 def main():
-    print(f'Tesseract test: {pytesseract.get_tesseract_version()}')
     runApp()
-
 main()
 
-# Importing Tesseract
 
 
