@@ -29,7 +29,7 @@ Right now, here's what each function does and where I learned how to build them:
 
 - extractAllText(image):
     OCR pass using Tesseract, with PSM 6 (treats it like a single block of text).
-    Works best after thresholding.
+    Works best after thresholding. Decided on PSM 6 because of information below.
     → https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc#options
 
 - getTableAge(image):
@@ -52,6 +52,16 @@ Right now, here's what each function does and where I learned how to build them:
     Uses a vertical kernel to extract only the vertical lines using 
     morphological operations (OpenCV's morphologyEx with a tall filter).
     → https://docs.opencv.org/4.x/d9/d61/tutorial_py_morphological_ops.html
+
+- splitThreeTables(filePath, linePos):
+    Crops the full PNG image into three separate table images:
+    Verbal Table 1, Verbal Table 2, and Nonverbal Table.
+    Uses midpoints between vertical line positions to crop columns,
+    then processes each cropped region for OCR. Assumes linePos has 
+    at least 9 sorted x-coordinates, mapped to each of the 9 vertical
+    lines in the original table.
+    → This will eventually replace splitImage() with more accurate cropping.
+
 '''
 
 from commonImports import *
@@ -121,15 +131,21 @@ def isolateVerticalLines(image):
 def splitThreeTables(filePath, linePos):
    image = cv2.imread(filePath, 0)
   
+  # Might come back and change x0 = linePos[0], etc. so it's more readable
    verbal1left = linePos[0]
    verbal2left = verbal1right = findMidpoint(linePos[2], linePos[3])
    nonverbal1left = verbal2right = findMidpoint(linePos[5], linePos[6])
    nonverbal2right = linePos[8]
 
-   verbal2left,  = linePos[3], linePos[5]
-   nonverbal1left, nonverbal2right = linePos[6], linePos[8]
-
-   verbal1Array = image[:, verbal1left:verbal]
-  
+   verbal1Array = image[:, verbal1left:verbal1right]
+   verbal2Array = image[:, verbal2left:verbal2right]
+   nonverbalArray = image[:, nonverbal1left:nonverbal2right]
+   
+   verbal1image = processImage(verbal1Array)
+   verbal2image = processImage(verbal2Array)
+   verbal3image = processImage(nonverbalArray)
+   
+   return verbal1image, verbal2image, verbal3image 
+          
 def findMidpoint(line1, line2):
    return line1 + line2 // 2
