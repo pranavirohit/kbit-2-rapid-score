@@ -14,7 +14,7 @@ mdtaylor
 ------------------------------------>
 
 prohit
-Please see below for a descriptoin of each function I wrote, and the resources I used to learn 
+Please see below for a description of each function I wrote, and the resources I used to learn 
 syntax/become more familar with the libraries I'm using. 
 
 - processPDF(pdfPath, outputFolder):

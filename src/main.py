@@ -1,8 +1,14 @@
 '''
 Please note: the UI and scoring logic will be built here after the data has
-been extracted and cleaned. Please see the logbook.txt for my work in building
-out/defining an algorithm for data processing as that was a significant part
-of my work.
+been extracted and cleaned. 
+
+Please see the logbook.txt for my work in building out/defining an algorithm for data 
+processing, as that was a significant part of my work.
+ 
+Please also see this document for how I plan to create the scoring logic, mapping each value
+to a cell in the table with the data (what I hope to produce through data extraction): 
+https://ash-trawler-907.notion.site/K-BIT2-Scoring-1cd5c24faeb080ce9fe8d882825b6d2d?pvs=4
+
 
 See these other files for more details:
 
