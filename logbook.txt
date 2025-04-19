@@ -125,6 +125,20 @@ in where the black lines are
 3. I will have to create a kernel that's a thin vertical line, because
 that's the element I want to isolate for this step
 4. Use getStructuringElement, because I want a line, this will be a rectangle
-5. Erode the table image (it'll just be a white screen with black lines,
+5. Note on syntax: this will be getStructuringElement(element, (width, height))
+6. Erode the table image (it'll just be a white screen with black lines,
 these black lines are the table lines)
-6. Get the location of the black lines
+7. Get the location of the black lines
+
+Pseudocode:
+def getVerticalLinesPositions(filePath):
+    create thresholded image (inverted black and white)
+    create image with only vertical lines remaining
+    find location of each vertical line
+
+## Finding Contours:
+Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
+Use cv2.findContours(image, mode, method) to find the contours.
+image: The binary input image.
+mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours only), cv2.RETR_LIST (all contours), cv2.RETR_TREE (hierarchical contours).
+method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress horizontal, vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE (store all contour points).
