@@ -184,9 +184,9 @@ def splitThreeTables(filePath, linePos):
 
     verbal1image = processImage(verbal1Array)
     verbal2image = processImage(verbal2Array)
-    verbal3image = processImage(nonverbalArray)
+    nonverbalImage = processImage(nonverbalArray)
 
-    return verbal1image, verbal2image, verbal3image
+    return verbal1image, verbal2image, nonverbalImage
 
 
 def findMidpoint(line1, line2):
