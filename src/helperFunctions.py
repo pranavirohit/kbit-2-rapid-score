@@ -1,6 +1,7 @@
 import cv2
 import pytesseract as pyt
 from pdf2image import convert_from_path #PDF2Image
+import os
 
 def processImage(filePath):
     image = cv2.imread(filePath)
@@ -21,10 +22,16 @@ def processPDF(pdfPath, outputFolder):
     # Save each image to the specified output folder by 
     for index, image in enumerate(images):
         # age = getTableAge(image)
+        
         bookStartingPage = 78 # Corresponds to physical book
         pageNum = index + bookStartingPage
         fileName = f'page_{pageNum}.png'
 
+        # Specify path to save image
+        fullPath = os.path.join(outputFolder, fileName)
+        image.save(fullPath, 'PNG') # Use Pillow for this
+
+        print(f'Added {fileName} to {fullPath}')
 
 # Want to eventually name the Table B1 files by their age
 def getTableAge(image):
