@@ -1,0 +1,10 @@
+# Saturday, April 19th
+
+## Brain Dump
+1. Need a way to convert the PDF with all the Table 1 scans into images that can be processed
+2. Basically take the scanned PDF, seperate each image, process each image through OCR
+(OCR is what makes it gray scale), then use tesseract to do text extraction
+3. Not entirely sure yet on how I want to store the data/what data structure I want to use
+4. But data extracted should be seperated by age and month, since that's what determines the
+other unique parameters of the test
+
