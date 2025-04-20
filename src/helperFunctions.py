@@ -100,7 +100,7 @@ def saveTablesFromPage(filePath, tableOutputFolder, pageNum):
 
     verbal1image.save(verbal1Path, 'PNG')
     verbal2image.save(verbal2Path, 'PNG')
-    verbal3image.save(nonverbalPath, 'PNG')
+    nonverbalImage.save(nonverbalPath, 'PNG')
 
     print(f'Saved cropped tables for page {pageNum} to {tableOutputFolder}')
 
