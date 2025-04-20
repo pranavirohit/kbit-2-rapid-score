@@ -92,7 +92,7 @@ def processPDF(pdfPath, pageOutputFolder, tableOutputFolder):
 
 def saveTablesFromPage(filePath, tableOutputFolder, pageNum):
     linePos = getVerticalLinesPositions(filePath)
-    verbal1image, verbal2image, verbal3image = splitThreeTables(filePath, linePos)
+    verbal1image, verbal2image, nonverbalImage = splitThreeTables(filePath, linePos)
 
     verbal1Path = os.path.join(tableOutputFolder, f"verbal1_page_{pageNum}.png")
     verbal2Path = os.path.join(tableOutputFolder, f"verbal2_page_{pageNum}.png")
