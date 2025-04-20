@@ -1,3 +1,41 @@
+# Sunday, April 6th
+
+Related Files: 15-112 > Term Project
+Audio_040625
+Video_040625
+
+- Refined the goal and scope of my project: to automate scoring for the KBIT-2 intelligence test by using OCR
+to extract information from standardized tables, particularly Table B1.
+- Followed a systematic approach to understand the scoring logic by labeling each score component (A1–F3) and 
+tracing how each one is derived:
+    - A1–A3 represent raw input scores from the test.
+    - B1 and B2 are sums of the raw scores.
+    - C1–C6 (standard scores, confidence intervals, and percentiles) are derived from Table B1.
+    - D1A and D1B are percentile-based descriptions also from the same table.
+    - F1–F3 relate to composite IQ and descriptive categories.
+
+[K-BIT2 Scoring](https://www.notion.so/K-BIT2-Scoring-1cd5c24faeb080ce9fe8d882825b6d2d?pvs=21)
+
+- Identified that Table B1 (verbal and nonverbal standard score conversions) is the most complex and essential for 
+automation.
+- Documented the workflow for score calculation in a table with explanations of how each value is derived.
+- Determined that future development should focus on:
+    - Extracting data programmatically from Table B1 (likely with OCR).
+    - Creating a system that auto-generates the full score profile based on raw scores.
+    - Allowing users to customize output (e.g. export as spreadsheet, select fields, or print).
+    
+    ### Next Steps
+    
+    - [ ]  Understand last two sections of K-BIT2
+        - [ ]  Graphical Profile
+        - [ ]  Score Comparison
+    - [ ]  Learn more about optical character recognition
+        - Which library to use? How will this interact with OpenCV?
+    - Office Hour Questions
+        1. Aim to store all the data values, store this (memoization?), and then access this for each participant?
+        2. Features of the application
+
+
 # Saturday, April 19th
 
 ## Brain Dump
@@ -142,3 +180,8 @@ Use cv2.findContours(image, mode, method) to find the contours.
 image: The binary input image.
 mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours only), cv2.RETR_LIST (all contours), cv2.RETR_TREE (hierarchical contours).
 method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress horizontal, vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE (store all contour points).
+
+# Sunday, April 20th
+
+## Data Extraction for Nonverbal Table
+1. Need to preprocess image using 
