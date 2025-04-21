@@ -2,35 +2,43 @@ from commonImports import *
 
 def extractAllText(filePath):
     image = PILImage.open(filePath)
-    text = pyt.image_to_string(image, config = '--psm 6')
+    text = pyt.image_to_string(image, config='--psm 6')
     return text
 
-# Takes input from extractAllText
 def cleanTextToList(text, tableType):
     cleanedData = []
-    allLines = text.splitlines() # Turning each line into a list
+    allLines = text.splitlines()
     firstLine, lastLine = getNumericalValues(text, tableType) 
-    selectedLines = allLines[firstLine: lastLine] # Only look at 
-    # text that are part of the rows with numbers
 
+    # Added type check (recommended by ChatGPT)
+    if firstLine is None or lastLine is None:
+        print(f"Warning: couldn't find bounds for {tableType}")
+        return []
+
+    selectedLines = allLines[firstLine: lastLine]
+    
     for line in selectedLines:
         line = cleanLine(line)
-        
+
         if isValidLength(line):
-            line = line.strip
+            line = line.strip()
             parts = line.split()
 
-            rawScore = int(parts[0])
-            standScore = int(parts[1])
-            confInt = parts[2]
-            percentile = parts[3]
+            # Added try and except (recommended by ChatGPT)
+            try:
+                rawScore = int(parts[0])
+                standScore = int(parts[1])
+                confInt = parts[2]
+                percentile = parts[3]
 
-            cleanedData.append({
-                'Raw': rawScore,
-                'Standard': standScore,
-                'ConfidenceInterval': confInt,
-                'Percentile': percentile
-            })
+                cleanedData.append({
+                    'Raw': rawScore,
+                    'Standard': standScore,
+                    'ConfidenceInterval': confInt,
+                    'Percentile': percentile
+                })
+            except:
+                print(f"Skipping line (parse error): {line}")
 
     return cleanedData
 
@@ -45,6 +53,7 @@ def cleanLine(line):
     # Checks replaces any extra characters beyond the expected, the only 
     # characters remaining should be numbers (0-9), white space (\s), > and .
     # for decimal points
+
     line = re.sub(r'[^0-9\s><.]+', '', line)
     return line
 
@@ -55,18 +64,18 @@ def checkDecimalPoints(line):
         currChar = line[i]
         nextChar = line[i + 1]
 
-        if ((currChar is '.') and 
+        if ((currChar == '.') and
             (not prevChar.isdigit()) and 
             (not nextChar.isdigit())):
 
             line = line[0: i] + line[i + 1:]
     
     return line
-    
+
 def isValidLength(line):
-    line = line.strip
+    line = line.strip()
     parts = line.split()
-    return (len(parts) is 4)
+    return (len(parts) == 4)
 
 def getNumericalValues(text, tableType):
     startingVal, endingVal = rawScoreValues(tableType)
@@ -77,12 +86,13 @@ def getNumericalValues(text, tableType):
     for line in text.splitlines():
         line = line.strip()
         
-        if line.startswith(startingVal):
+        # Added string comparison (recommended by ChatGPT)
+        if line.startswith(str(startingVal)):
             firstLine = currLine
         
-        if line.find('B.1') != -1 and currLine > firstLine:
+        if 'B.1' in line and firstLine is not None:
             lastLine = currLine
-            return  firstLine, lastLine
+            return firstLine, lastLine
         
         currLine += 1
     
@@ -101,24 +111,27 @@ def rawScoreValues(tableType):
             endingVal = rawScores[key][1]
     
     return startingVal, endingVal
-    
+
 def createDataFrame(tableType):
     startingVal, endingVal = rawScoreValues(tableType)
-    rawScores = list(range(startingVal, endingVal - 1, -1)) # Because always these values
+    rawScores = list(range(startingVal, endingVal - 1, -1))
     df = pd.DataFrame({'Raw': rawScores})
-    df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
+    df.set_index('Raw', inplace=True)
     return df
 
-def listToDataFrame(list, tableType, ):
+def listToDataFrame(dataList, tableType):
     df = createDataFrame(tableType)
-    cleanedData = pd.DataFrame(list)
+    cleanedData = pd.DataFrame(dataList)
     cleanedData.set_index('Raw', inplace=True)
     df = df.join(cleanedData)
     return df
 
 def dataFrameToCSV(df, tableType, outputFolder):
-    fileName = 'kbit2_test.csv'
+    fileName = f'kbit2_{tableType}.csv'
     filePath = os.path.join(outputFolder, fileName)
+    
+    # Added folder existence check (recommended by ChatGPT)
+    os.makedirs(outputFolder, exist_ok=True)
 
     df.to_csv(filePath)
     print(f'Saved {fileName} to {filePath}')
