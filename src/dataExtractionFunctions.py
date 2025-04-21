@@ -66,13 +66,18 @@ def getNumericalValues(text, tableType):
 
 # Plan to condense this into one function
 def createDataFrame(tableType):
-    rawScores = list(range(108, -1, -1)) # Because always these values
+    startingVal = None
+    endingVal = None
+    rawScores = {'verbal1': [108, 52], 
+                        'verbal2': [51, 0],
+                        'nonverbal': [46, 0]}
+    
+    for key in rawScores:
+        if key is tableType:
+            startingVal = rawScores[key][0]
+            endingVal = rawScores[key][1]
+
+    rawScores = list(range(startingVal, endingVal - 1, -1)) # Because always these values
     df = pd.DataFrame({'Raw': rawScores})
     df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
-    return df
-
-def createNonverbalDataFrame():
-    rawScores = list(range(46, -1, -1)) # Because always these values
-    df = pd.DataFrame({'Raw': rawScores})
-    df.set_index('Raw', inplace = True)
     return df
