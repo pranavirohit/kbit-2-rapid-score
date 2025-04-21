@@ -1,40 +1,44 @@
 # Sunday, April 6th
 
-Related Files: 15-112 > Term Project
-Audio_040625
+Related Files: 15-112 > Term Project  
+Audio_040625  
 Video_040625
 
-- Refined the goal and scope of my project: to automate scoring for the KBIT-2 intelligence test by using OCR
-to extract information from standardized tables, particularly Table B1.
-- Followed a systematic approach to understand the scoring logic by labeling each score component (A1–F3) and 
-tracing how each one is derived:
-    - A1–A3 represent raw input scores from the test.
-    - B1 and B2 are sums of the raw scores.
-    - C1–C6 (standard scores, confidence intervals, and percentiles) are derived from Table B1.
-    - D1A and D1B are percentile-based descriptions also from the same table.
-    - F1–F3 relate to composite IQ and descriptive categories.
+- Refined the goal and scope of my project: to automate scoring for the KBIT-2  
+  intelligence test by using OCR to extract information from standardized tables,  
+  particularly Table B1.  
+- Followed a systematic approach to understand the scoring logic by labeling each  
+  score component (A1–F3) and tracing how each one is derived:  
+    - A1–A3 represent raw input scores from the test.  
+    - B1 and B2 are sums of the raw scores.  
+    - C1–C6 (standard scores, confidence intervals, and percentiles) are derived from  
+      Table B1.  
+    - D1A and D1B are percentile-based descriptions also from the same table.  
+    - F1–F3 relate to composite IQ and descriptive categories.  
 
 [K-BIT2 Scoring](https://www.notion.so/K-BIT2-Scoring-1cd5c24faeb080ce9fe8d882825b6d2d?pvs=21)
 
-- Identified that Table B1 (verbal and nonverbal standard score conversions) is the most complex and essential for 
-automation.
-- Documented the workflow for score calculation in a table with explanations of how each value is derived.
-- Determined that future development should focus on:
-    - Extracting data programmatically from Table B1 (likely with OCR).
-    - Creating a system that auto-generates the full score profile based on raw scores.
-    - Allowing users to customize output (e.g. export as spreadsheet, select fields, or print).
-    
-    ### Next Steps
-    
-    - [ ]  Understand last two sections of K-BIT2
-        - [ ]  Graphical Profile
-        - [ ]  Score Comparison
-    - [ ]  Learn more about optical character recognition
-        - Which library to use? How will this interact with OpenCV?
-    - Office Hour Questions
-        1. Aim to store all the data values, store this (memoization?), and then access this for each participant?
-        2. Features of the application
+- Identified that Table B1 (verbal and nonverbal standard score conversions) is the  
+  most complex and essential for automation.  
+- Documented the workflow for score calculation in a table with explanations of how  
+  each value is derived.  
+- Determined that future development should focus on:  
+    - Extracting data programmatically from Table B1 (likely with OCR).  
+    - Creating a system that auto-generates the full score profile based on raw scores.  
+    - Allowing users to customize output (e.g. export as spreadsheet, select fields,  
+      or print).  
 
+### Next Steps
+
+    - [ ]  Understand last two sections of K-BIT2  
+        - [ ]  Graphical Profile  
+        - [ ]  Score Comparison  
+    - [ ]  Learn more about optical character recognition  
+        - Which library to use? How will this interact with OpenCV?  
+    - Office Hour Questions  
+        1. Aim to store all the data values, store this (memoization?), and then access  
+           this for each participant?  
+        2. Features of the application
 
 # Saturday, April 19th
 
@@ -112,76 +116,115 @@ __ 61 | 154 143-159 >99.9_ 60 5471 0.4
 ae
 80 Table B.1: Verbal and Nonverbal Norms, Ages 4:4~-4:5
 
-
-## Redefinining Pipeline
+## Redefining Pipeline
 1. Have the PDF with all the Table B.1 pages
-2. To use OCR, I need to convert all the PDF pages to their PNG versions -> 
-contain this in processPDF() 
-3. Then, to extract meaningful data, I need to split these PNG images into
-the verbal and nonverbal tables
+2. To use OCR, I need to convert all the PDF pages to their PNG versions -> contain this in
+   processPDF()
+3. Then, to extract meaningful data, I need to split these PNG images into the verbal and
+   nonverbal tables
 4. Finally, I need to extract the text
 
 ### Splitting Image to Extract Table Data
-1. Assuming I have a PNG of the table file, I want to split it into the three
-tables on the page. I plan to do this by looking for vertical lines:
+1. Assuming I have a PNG of the table file, I want to split it into the three tables on the
+   page. I plan to do this by looking for vertical lines:
 
-Verbal (Table 1):
+Verbal (Table 1):  
 Start Line: 1, End Line: 3
 
-Verbal (Table 2):
+Verbal (Table 2):  
 Start Line: 4, End Line: 6
 
-Nonverbal (Table 3):
+Nonverbal (Table 3):  
 Start Line: 7, End Line: 9
 
-2. Then, I want to find the location for each of the vertical lines
-3. Using the location for each, I want to create three new PNGs, store
-them in a new folder
-4. Then, I want to create an algorithm to extract the text from 
-each of these pages. This is easier, because it's just recognizing
-the same four columns and turning it into a data structure I can run this
-on all the images for. 
+2. Then, I want to find the location for each of the vertical lines  
+3. Using the location for each, I want to create three new PNGs, store them in a new folder  
+4. Then, I want to create an algorithm to extract the text from each of these pages. This is
+   easier, because it's just recognizing the same four columns and turning it into a data
+   structure I can run this on all the images for.
 
-
-## Finding Location of Vertical Lines:
+## Finding Location of Vertical Lines
 Tutorial: https://www.youtube.com/watch?v=E_NRYxJyZlg
 
-- Mask: Binary black-and-white images, allows us to specify which regions
-we're interested in (usually white)
+- Mask: Binary black-and-white images, allows us to specify which regions we're
+  interested in (usually white)
 - Erosion: Removing elements
 - Dilation: Expanding or growing elements
-- Kernels: What you specify, this is how you decide how to change the image
-to create the mask you want
+- Kernels: What you specify, this is how you decide how to change the image to create the
+  mask you want
 
 This is the algorithm I want to implement based on the video:
 
-1. For my project, to split each image, I want to make the vertical lines
-white (this is what I want information on), and the rest of the image, with
-the number values, black
-2. This is just temporarily, because to find the split points, I'm only interested 
-in where the black lines are
-3. I will have to create a kernel that's a thin vertical line, because
-that's the element I want to isolate for this step
+1. For my project, to split each image, I want to make the vertical lines white (this is what
+   I want information on), and the rest of the image, with the number values, black
+2. This is just temporarily, because to find the split points, I'm only interested in where
+   the black lines are
+3. I will have to create a kernel that's a thin vertical line, because that's the element I
+   want to isolate for this step
 4. Use getStructuringElement, because I want a line, this will be a rectangle
 5. Note on syntax: this will be getStructuringElement(element, (width, height))
-6. Erode the table image (it'll just be a white screen with black lines,
-these black lines are the table lines)
+6. Erode the table image (it'll just be a white screen with black lines, these black lines
+   are the table lines)
 7. Get the location of the black lines
 
-Pseudocode:
-def getVerticalLinesPositions(filePath):
-    create thresholded image (inverted black and white)
-    create image with only vertical lines remaining
-    find location of each vertical line
+Pseudocode:  
+def getVerticalLinesPositions(filePath):  
+    create thresholded image (inverted black and white)  
+    create image with only vertical lines remaining  
+    find location of each vertical line  
 
 ## Finding Contours:
-Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
-Use cv2.findContours(image, mode, method) to find the contours.
-image: The binary input image.
-mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours only), cv2.RETR_LIST (all contours), cv2.RETR_TREE (hierarchical contours).
-method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress horizontal, vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE (store all contour points).
+Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html  
+1. Use cv2.findContours(image, mode, method) to find the contours  
+2. image: The binary input image  
+3. mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours only),  
+   cv2.RETR_LIST (all contours), cv2.RETR_TREE (hierarchical contours).  
+4. method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress horizontal,
+   vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE (store all
+   contour points)
 
 # Sunday, April 20th
 
-## Data Extraction for Nonverbal Table
-1. Need to preprocess image using 
+## Data Extraction for Nonverbal Table  
+1. Need to preprocess image  
+
+## Office Hours  
+1. Process the image, clean the text you get / make sure all the anomalies are gone  
+2. Turn each line into a row in a CSV file (each table page is its own CSV)  
+3. Can call CSV whenever I need patient information  
+4. Create separate folders for each stage of processing  
+5. Store data as a pandas file (.csv)
+
+# Monday, April 21st
+
+## Data Extraction for Tables  
+- What do I currently have right now? A way to extract text, but I want to create an
+  algorithm to actually clean and process this so much better
+- Either I can work directly on cleaning the text I already get, and go from there, or I can
+  go back and do some more image processing and then extract the text
+- What do I know about each table as of now? What should the final table/CSV look like?
+
+### Verbal Table Information  
+Columns: Raw Score, Stand. Score, 90% Conf. Int., % ile Rank  
+Table 1:  
+- First column of values is always for the raw score, goes from 108 to 52 (this does NOT
+  change for any table)
+- Second column of values is the standard score, starts at 160, but these values change
+  depending on the table, but are always decreasing
+- Third column is the 90% confidence interval, this also changes depending on age, but is
+  always a range less than 100
+- Fourth column is percentile rank, this also change depending on age
+
+Table 2:  
+- First column of values is always for the raw score, goes from 51 to 0 (this does NOT
+  change for any table)
+- The only non-numerical values that should be recognized are -, > and .
+
+### Nonverbal Table Information  
+- First column of values is always for the raw score, goes from 46 to 0 (this does NOT
+  change for any table)
+
+### CSV Table Files  
+1. For verbal table, this should contain a heading row, then columns numbered from 108 to 0  
+2. For nonverbal table, this should also contain a heading row, then columns numbered from 46 
+to 0
