@@ -1,15 +1,15 @@
 from commonImports import *
 # Takes input from extractAllText
-def cleanTextToList(text, table):
+def cleanTextToList(text, tableType):
     cleanedData = []
     allLines = text.splitlines() # Turning each line into a list
-    firstLine, lastLine = getNumericalValues(text, table) 
+    firstLine, lastLine = getNumericalValues(text, tableType) 
     selectedLines = allLines[firstLine: lastLine] # Only look at 
     # text that are part of the rows with numbers
 
     for line in selectedLines:
         line = cleanLine(line)
-        if isValidLine(line):
+        if isValidLine(line, tableType):
 
 def cleanLine(line):
     line = line.replace('|', ' ')
@@ -34,14 +34,14 @@ def isValidLine(line):
 
         if rawScore
 
-def getNumericalValues(text, table):
+def getNumericalValues(text, tableType):
     startingVal = None
     startingRawScores = {'verbal1': 108, 
                         'verbal2': 51,
                         'nonverbal': 46}
                     
     for key in startingRawScores:
-        if key is table:
+        if key is tableType:
             startingVal = startingRawScores[key]
 
     currLine = 0
@@ -64,7 +64,8 @@ def getNumericalValues(text, table):
     
 #     fileName = # Come back to this
 
-def createVerbalDataFrame():
+# Plan to condense this into one function
+def createDataFrame(tableType):
     rawScores = list(range(108, -1, -1)) # Because always these values
     df = pd.DataFrame({'Raw': rawScores})
     df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
