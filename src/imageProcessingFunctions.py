@@ -178,9 +178,9 @@ def splitThreeTables(filePath, linePos):
     nonverbal1left = verbal2right = findMidpoint(x5, x6)
     nonverbal2right = x8
 
-    verbal1Array = image[:, verbal1left:verbal1right]
-    verbal2Array = image[:, verbal2left:verbal2right]
-    nonverbalArray = image[:, nonverbal1left:nonverbal2right]
+    verbal1Array = image[:, verbal1left: verbal1right]
+    verbal2Array = image[:, verbal2left: verbal2right]
+    nonverbalArray = image[:, nonverbal1left: nonverbal2right]
 
     verbal1image = processImage(verbal1Array)
     verbal2image = processImage(verbal2Array)
@@ -188,14 +188,50 @@ def splitThreeTables(filePath, linePos):
 
     return verbal1image, verbal2image, nonverbalImage
 
-
 def findMidpoint(line1, line2):
     return (line1 + line2) // 2
 
 # Takes input from extractAllText
-def cleanText(text):
+def cleanTextToList(text):
+    cleanedData = []
+    allLines = text.splitlines() # Turning each line into a list
+    firstLine, lastLine = getNumericalValues(text)
+    selectedLines = allLines[firstLine: lastLine]
+
+    for line in selectedLines:
+        line = cleanLine(line)
+        if isValidLine(line):
+
+
+def cleanLine(line):
+    line = line.replace('|', ' ')
+    line = line.replace('_', ' ')
+    line = line.replace('—', '-')
+    line = line.replace('=', ' ')
+    # Tutorial: https://www.w3schools.com/python/python_regex.asp
+    # Checks replaces any extra characters beyond the expected, the only 
+    # characters remaining should be numbers (0-9), white space (\s), > and .
+    # for decimal points
+    line = re.sub(r'[^0-9\s>.]+', '', line)
+    return line
+
+def isValidLine(line):
+
+def getNumericalValues(text):
+    currLine = 0
+    firstLine = None
+    lastLine = None
     for line in text.splitlines():
-        pass
+        line = line.strip()
+        
+        if line.startswith(108):
+            firstLine = currLine
+        
+        if line.find('B.1') != -1 and currLine > firstLine:
+            lastLine = currLine
+            return  firstLine, lastLine
+        
+        currLine += 1
 
 # def convertTextToCSV(data, outputFolder):
 #     df = 
@@ -203,13 +239,13 @@ def cleanText(text):
 #     fileName = # Come back to this
 
 def createVerbalDataFrame():
-    rawScores = list(range(108, -1, -1))
+    rawScores = list(range(108, -1, -1)) # Because always these values
     df = pd.DataFrame({'Raw': rawScores})
     df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
     return df
 
 def createNonverbalDataFrame():
-    rawScores = list(range(46, -1, -1))
+    rawScores = list(range(46, -1, -1)) # Because always these values
     df = pd.DataFrame({'Raw': rawScores})
     df.set_index('Raw', inplace = True)
     return df
