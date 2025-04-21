@@ -191,3 +191,25 @@ def splitThreeTables(filePath, linePos):
 
 def findMidpoint(line1, line2):
     return (line1 + line2) // 2
+
+# Takes input from extractAllText
+def cleanText(text):
+    for line in text.splitlines():
+        pass
+
+# def convertTextToCSV(data, outputFolder):
+#     df = 
+    
+#     fileName = # Come back to this
+
+def createVerbalDataFrame():
+    rawScores = list(range(108, -1, -1))
+    df = pd.DataFrame({'Raw': rawScores})
+    df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
+    return df
+
+def createNonverbalDataFrame():
+    rawScores = list(range(46, -1, -1))
+    df = pd.DataFrame({'Raw': rawScores})
+    df.set_index('Raw', inplace = True)
+    return df
