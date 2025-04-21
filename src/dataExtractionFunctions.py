@@ -24,6 +24,10 @@ def cleanLine(line):
     return line
 
 def isValidLine(line):
+    rawScores = {'verbal1': [108, 52], 
+                 'verbal2': [51, 0],
+                 'nonverbal': [46, 0]}
+    
     line = line.strip
     parts = line.split()
     if len(parts) is 4:
