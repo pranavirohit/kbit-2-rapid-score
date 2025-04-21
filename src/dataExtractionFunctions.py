@@ -9,45 +9,74 @@ def cleanTextToList(text, tableType):
 
     for line in selectedLines:
         line = cleanLine(line)
-        if isValidLine(line, tableType):
+        
+        if isValidLength(line):
+            line = line.strip
+            parts = line.split()
+
+            rawScore = int(parts[0])
+            standScore = int(parts[1])
+            confInt = parts[2]
+            percentile = parts[3]
+
+            cleanedData.append({
+                'Raw': rawScore,
+                'Standard': standScore,
+                'ConfidenceInterval': confInt,
+                'Percentile': percentile
+            })
 
 def cleanLine(line):
     line = line.replace('|', ' ')
     line = line.replace('_', ' ')
     line = line.replace('—', '-')
     line = line.replace('=', ' ')
+    line = checkDecimalPoints(line)
+
     # Tutorial: https://www.w3schools.com/python/python_regex.asp
     # Checks replaces any extra characters beyond the expected, the only 
     # characters remaining should be numbers (0-9), white space (\s), > and .
     # for decimal points
-    line = re.sub(r'[^0-9\s>.]+', '', line)
+    line = re.sub(r'[^0-9\s><.]+', '', line)
     return line
 
-def isValidLine(line):
+def comeBackToThis(tableType):
+    startingVal = None
+    endingVal = None
     rawScores = {'verbal1': [108, 52], 
-                 'verbal2': [51, 0],
-                 'nonverbal': [46, 0]}
+                        'verbal2': [51, 0],
+                        'nonverbal': [46, 0]}
     
+    for key in rawScores:
+        if key is tableType:
+            startingVal = rawScores[key][0]
+            endingVal = rawScores[key][1]
+    
+
+def checkDecimalPoints(line):
+    prevChar = None
+    length = len(line)
+    for i in range(1, length - 1):
+
+        prevChar = line[i - 1]
+        currChar = line[i]
+        nextChar = line[i + 1]
+
+        if ((currChar is '.') and 
+            (not prevChar.isdigit()) and 
+            (not nextChar.isdigit())):
+
+            line = line[0: i] + line[i + 1:]
+    
+    return line
+    
+def isValidLength(line):
     line = line.strip
     parts = line.split()
-    if len(parts) is 4:
-        rawScore = parts[0]
-        standScore = parts[1]
-        confInt = parts[2]
-        percentile = parts[3]
+    return (len(parts) is 4)
 
-        if rawScore
 
-def getNumericalValues(text, tableType):
-    startingVal = None
-    startingRawScores = {'verbal1': 108, 
-                        'verbal2': 51,
-                        'nonverbal': 46}
-                    
-    for key in startingRawScores:
-        if key is tableType:
-            startingVal = startingRawScores[key]
-
+def getNumericalValues(text, startingVal):
     currLine = 0
     firstLine = None
     lastLine = None
@@ -69,19 +98,10 @@ def getNumericalValues(text, tableType):
 #     fileName = # Come back to this
 
 # Plan to condense this into one function
-def createDataFrame(tableType):
-    startingVal = None
-    endingVal = None
-    rawScores = {'verbal1': [108, 52], 
-                        'verbal2': [51, 0],
-                        'nonverbal': [46, 0]}
-    
-    for key in rawScores:
-        if key is tableType:
-            startingVal = rawScores[key][0]
-            endingVal = rawScores[key][1]
-
+def createDataFrame(tableType, startingVal, endingVal):
     rawScores = list(range(startingVal, endingVal - 1, -1)) # Because always these values
     df = pd.DataFrame({'Raw': rawScores})
     df.set_index('Raw', inplace = True) # Removes 0-index, makes raw score new index
     return df
+
+def f
