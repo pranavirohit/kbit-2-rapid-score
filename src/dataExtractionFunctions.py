@@ -7,7 +7,6 @@ def extractAllText(filePath):
 
 def cleanTextToList(text, tableType):
     cleanedData = createEmptyDataList(tableType)
-    print(cleanedData)
     lastUpdatedRawScore = None
 
     allLines = text.splitlines()
@@ -20,6 +19,7 @@ def cleanTextToList(text, tableType):
 
         parts = reformatParts(line)
         parts = fillInMissingValues(parts, lastUpdatedRawScore)
+        print(parts)
         
         # Changed to update pre-made dictionary
         lastUpdated = updateDictionary(line, parts, cleanedData)
@@ -32,14 +32,16 @@ def cleanTextToList(text, tableType):
 def fillInMissingValues(parts, lastUpdated):
     if len(parts) == 3:
             # Need to see the last filled row
+            print(f'parts: {parts}, lastUpdated: {lastUpdated}')
             parts = placeholderRawScore(parts, lastUpdated)
- 
+            # print(f'after parts: {parts}, lastUpdated: {lastUpdated}')
     return parts
 
 def placeholderRawScore(parts, lastUpdated):
     potentialRange = parts[1]
     if (potentialRange.find('-') != -1): # Checking if there's a range value
-        parts.insert(0, lastUpdated)
+        parts.insert(0, str(lastUpdated - 1)) # It was missing the -1 here every
+        # time I update the last updated!!!
         return parts
 
 def createEmptyDataList(tableType):

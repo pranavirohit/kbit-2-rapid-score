@@ -41,7 +41,7 @@ def testCSVPage(type):
     text = extractAllText(test)
     print(f'extractAll: {text}')
     cleanedList = cleanTextToList(text, type)
-    print(cleanedList)
+    # print(cleanedList)
 
     df = listToDataFrame(cleanedList, type)
     dataFrameToCSV(df, type, output)
