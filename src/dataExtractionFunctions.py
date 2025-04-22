@@ -10,23 +10,17 @@ def cleanTextToList(text, tableType):
     allLines = text.splitlines()
     firstLine, lastLine = getNumericalValues(text, tableType) 
 
-    # Added type check (recommended by ChatGPT)
-    if firstLine is None or lastLine is None:
-        print(f"Warning: couldn't find bounds for {tableType}")
-        return []
-
     selectedLines = allLines[firstLine: lastLine]
+    startingVal, endingVal = rawScoreValues(tableType)
 
-    for line in selectedLines:
+    for i in range(endingVal, startingVal - 1, -1):
+        line = selectedLines[i]
         line = line.strip()
         line = cleanLine(line)
-
-        
-        # line = line.strip()
         parts = reformatParts(line)
 
         if len(parts) == 3:
-            parts = addRawScore(parts)
+            parts = addRawScore(parts, i)
 
         values = createDictionary(line, parts)
 
@@ -36,10 +30,10 @@ def cleanTextToList(text, tableType):
     print(cleanedData)
     return cleanedData
 
-def addRawScore(parts):
+def addRawScore(parts, currRawScore):
     potentialRange = parts[1]
     if (potentialRange.find('-') != -1):
-        parts.insert(0, '0') # Insert 0 as a placeholder value for the
+        parts.insert(currRawScore, '0') # Insert 0 as a placeholder value for the
         # index
         return parts
     
@@ -63,11 +57,9 @@ def createDictionary(line, parts):
         standScore = int(parts[1])
         confInt = parts[2]
 
-        if confInt('-') > 1:
+        if confInt.count('-') > 1:
+            rawScore, confInt = checkConfidenceInterval(confInt)
 
-
-        if checkConfidenceInterval(confInt) is not None:
-            rawScore = 
         percentile = checkPercentile(parts[3])
 
         result = ({
@@ -89,16 +81,11 @@ def checkPercentile(part):
         return part
 
 def checkConfidenceInterval(part):
-        values = part.split('-')
-        updatedRawScore = int(values[0])
-        updatedConfInt = f'({values[1]}-{values[2]})'
-        return updatedRawScore, updatedConfInt
-    else:
-        return None
+    values = part.split('-')
+    updatedRawScore = int(values[0])
+    updatedConfInt = f'({values[1]}-{values[2]})'
+    return updatedRawScore, updatedConfInt
 
-def updateConfidenceInterval(part):
-
-    
 def getOnlyDigits(line):
     firstDigit = None
     lastDigit = None
@@ -139,27 +126,8 @@ def checkDecimalPoints(part):
     if part.startswith('.'):
         part = part[1:]
     if part.endswith('.'):
-        part = part[-1]
+        part = part[:-1]
     return part
-
-    # # Changed to while loop from for loop to keep track of indices
-    # i = 1 
-    # length = len(line)
-    # while i < (length - 1):
-    #     prevChar = line[i - 1]
-    #     currChar = line[i]
-    #     nextChar = line[i + 1]
-
-    #     if (currChar == '.'):
-    #         if ((i == 0) or 
-    #             (i == length - 1)):
-                
-    #             line = line[0: i] + line[i + 1:]
-       
-    #     else:
-    #         i += 1
-    
-    # return line
 
 def isValidLength(line):
     line = line.strip()

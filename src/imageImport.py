@@ -34,12 +34,11 @@ def saveAllKBITPages():
     
     print(extractAllText(testCroppedPage))
 
-def testCSVPage():
-    test = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\verbal1_page_80.png"
+def testCSVPage(type):
+    test = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\verbal2_page_80.png"
     output = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\test_csv_files"
 
     print(extractAllText(test))
-    type = 'verbal1'
     text = extractAllText(test)
     cleanedList = cleanTextToList(text, type)
     df = listToDataFrame(cleanedList, type)
@@ -48,6 +47,6 @@ def testCSVPage():
     
 
 def main():
-    testCSVPage()
+    testCSVPage('verbal2')
 
 main()
