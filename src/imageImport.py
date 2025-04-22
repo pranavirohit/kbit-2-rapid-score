@@ -38,13 +38,13 @@ def testCSVPage(type):
     test = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\table_data_files\verbal2_page_80.png"
     output = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\test_csv_files"
 
-    print(extractAllText(test))
     text = extractAllText(test)
+    print(f'extractAll: {text}')
     cleanedList = cleanTextToList(text, type)
+    print(cleanedList)
+
     df = listToDataFrame(cleanedList, type)
     dataFrameToCSV(df, type, output)
-
-    
 
 def main():
     testCSVPage('verbal2')

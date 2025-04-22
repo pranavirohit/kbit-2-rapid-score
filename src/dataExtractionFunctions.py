@@ -7,6 +7,7 @@ def extractAllText(filePath):
 
 def cleanTextToList(text, tableType):
     cleanedData = createEmptyDataList(tableType)
+    print(cleanedData)
     lastUpdatedRawScore = None
 
     allLines = text.splitlines()
@@ -38,13 +39,13 @@ def fillInMissingValues(parts, lastUpdated):
 def placeholderRawScore(parts, lastUpdated):
     potentialRange = parts[1]
     if (potentialRange.find('-') != -1): # Checking if there's a range value
-        parts.insert(0, int(lastUpdated))
+        parts.insert(0, lastUpdated)
         return parts
 
 def createEmptyDataList(tableType):
     toPopulate = []
     startingVal, endingVal = rawScoreValues(tableType)
-    for i in range(endingVal, startingVal - 1, -1):
+    for i in range(startingVal, endingVal - 1, -1):
         row = ({
         'Raw': i,
         'Standard': None,
@@ -92,14 +93,12 @@ def updateDictionary(line, parts, dataList):
 
         for valDict in dataList: # Indexing into dictionaries, each element is
             # a dictionary
-            for key in valDict: # Indexing into keys
-                if valDict['Raw'] == rawScore:
-                    valDict['Raw'] = rawScore
-                    valDict['Standard'] = standScore
-                    valDict['ConfidenceInterval'] = confInt
-                    valDict['Percentile'] = percentile
-        
-        return rawScore
+            if valDict['Raw'] == rawScore:
+                valDict['Raw'] = rawScore
+                valDict['Standard'] = standScore
+                valDict['ConfidenceInterval'] = confInt
+                valDict['Percentile'] = percentile
+                return rawScore
     
     except:
         print(f'Skipping line (parse error): {line}')
