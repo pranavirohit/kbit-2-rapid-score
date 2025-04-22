@@ -228,3 +228,32 @@ Table 2:
 1. For verbal table, this should contain a heading row, then columns numbered from 108 to 0  
 2. For nonverbal table, this should also contain a heading row, then columns numbered from 46 
 to 0
+
+### Common Errors for Validity Checks
+1. All data points should start and end with digits
+- Created checkDecimalPoints(line)
+54 152. 141-157 >99.9
+
+2. The percentile should be between 99.9 and 0.1, and the > should not be recognized as a
+number value
+57 154 143-159 399.9
+
+3. The value of the raw score must be between the expected values, based on the rawScores
+dictionary
+
+## Progress
+Produced three text extraction files from algorithm (Term Project > test_csv_files)
+1. page_78_verbal1_1: Table 1, didn't add - character to expected characters, so range
+values weren't correct
+2. page_78_verbal1_2: Table 1, after adding - character
+3. page_80_verbal1_1: Table 1, for another page
+
+# Tuesday, April 22nd
+
+### Common Errors for Validity Checks (Cont'd)
+4. If there are three values, they often start from the standard score
+160 148-165 399.9
+
+5. If there are three hyphens, check that the first number in the range is smaller than the
+second number, if not, seperate them
+85 160-148-165. >99.9
