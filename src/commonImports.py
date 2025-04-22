@@ -23,7 +23,6 @@ from imageProcessingFunctions import (
 from dataExtractionFunctions import (
     extractAllText,
     cleanTextToList,
-    cleanLine,
     checkDecimalPoints,
     isValidLength,
     getNumericalValues,

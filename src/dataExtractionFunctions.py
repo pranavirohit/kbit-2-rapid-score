@@ -18,65 +18,132 @@ def cleanTextToList(text, tableType):
     selectedLines = allLines[firstLine: lastLine]
 
     for line in selectedLines:
-        line = cleanLine(line)
+        line = line.strip()
+        line = re.sub(r'[^0-9\s><.-]+', '', line)
+        # line = cleanLine(line)
 
-        if isValidLength(line):
-            line = line.strip()
-            parts = line.split()
+        
+        # line = line.strip()
+        parts = reformatParts(line)
 
-            # Added try and except (recommended by ChatGPT)
-            try:
-                rawScore = int(parts[0])
-                standScore = int(parts[1])
-                confInt = parts[2]
-                percentile = parts[3]
+        if len(parts) == 3:
+            parts = addRawScore(parts)
 
-                cleanedData.append({
-                    'Raw': rawScore,
-                    'Standard': standScore,
-                    'ConfidenceInterval': confInt,
-                    'Percentile': percentile
-                })
-            except:
-                print(f"Skipping line (parse error): {line}")
+        values = createDictionary(line, parts)
 
+        if values is not None:
+            cleanedData.append(values)
+    
+    print(cleanedData)
     return cleanedData
 
-def cleanLine(line):
-    line = line.replace('|', ' ')
-    line = line.replace('_', ' ')
-    line = line.replace('—', '-')
-    line = line.replace('=', ' ')
-    line = checkDecimalPoints(line)
-
-    # Tutorial: https://www.w3schools.com/python/python_regex.asp
-    # Checks replaces any extra characters beyond the expected, the only 
-    # characters remaining should be numbers (0-9), white space (\s), > and .
-    # for decimal points
-
-    line = re.sub(r'[^0-9\s><.-]+', '', line) # Addded dash character to fix error
-    # with ranges
-    return line
-
-def checkDecimalPoints(line):
-    # Changed to while loop from for loop to keep track of indices
-    i = 1 
-    length = len(line)
-    while i < len(line) - 1:
-        prevChar = line[i - 1]
-        currChar = line[i]
-        nextChar = line[i + 1]
-
-        if ((currChar == '.') and
-            (not prevChar.isdigit()) and 
-            (not nextChar.isdigit())):
-
-            line = line[0: i] + line[i + 1:]
-       
-        else:
-            i += 1
+def addRawScore(parts):
+    potentialRange = parts[1]
+    if (potentialRange.find('-') != -1):
+        parts.insert(0, '0') # Insert 0 as a placeholder value for the
+        # index
+        return parts
     
+def reformatParts(line):
+    parts = line.split()
+    result = []
+
+    for part in parts:
+        part = part.strip()
+        part = checkDecimalPoints(part)
+        part = re.sub(r'[^0-9\s><.-]+', '', part)
+
+        if part != '':
+            result.append(part)
+    
+    return result
+
+def createDictionary(line, parts):
+    try: 
+        rawScore = int(parts[0])
+        standScore = int(parts[1])
+        confInt = parts[2]
+        percentile = checkPercentile(parts[3])
+
+        result = ({
+            'Raw': rawScore,
+            'Standard': standScore,
+            'ConfidenceInterval': confInt,
+            'Percentile': percentile
+        })
+        return result
+    
+    except:
+        print(f'Skipping line (parse error): {line}')
+        return None
+
+def checkPercentile(part):
+    if len(part) == 4:
+        return '>99.9'
+    else:
+        return part
+    
+def getOnlyDigits(line):
+    firstDigit = None
+    lastDigit = None
+    length = len(line)
+
+    for i in range(length):
+        char = line[i]
+        if char.isdigit() and firstDigit is None:
+            firstDigit = i
+    
+    for i in range(length - 1, -1, -1):
+        char = line[i]
+        if char.isdigit() and lastDigit is None:
+            lastDigit = i
+    
+    if firstDigit is None and lastDigit is None:
+        print(f'Error in finding digit values: {line}')
+        return line
+    
+    line = line[firstDigit: lastDigit + 1]
     return line
+
+# def cleanLine(line):
+#     line = getOnlyDigits(line)
+#     line = line.replace('|', ' ')
+#     line = line.replace('_', ' ')
+#     line = line.replace('—', '-')
+#     line = line.replace('=', ' ')
+#     lin
+
+#     # Tutorial: https://www.w3schools.com/python/python_regex.asp
+#     # Checks replaces any extra characters beyond the expected, the only 
+#     # characters remaining should be numbers (0-9), white space (\s), > and .
+#     # for decimal points
+#     return line
+
+def checkDecimalPoints(part):
+    if part.startswith('.'):
+        part = part[1:]
+    if part.endswith('.'):
+        part = part[-1]
+    return part
+
+    # # Changed to while loop from for loop to keep track of indices
+    # i = 1 
+    # length = len(line)
+    # while i < (length - 1):
+    #     prevChar = line[i - 1]
+    #     currChar = line[i]
+    #     nextChar = line[i + 1]
+
+    #     if (currChar == '.'):
+    #         if ((i == 0) or 
+    #             (i == length - 1)):
+                
+    #             line = line[0: i] + line[i + 1:]
+       
+    #     else:
+    #         i += 1
+    
+    # return line
 
 def isValidLength(line):
     line = line.strip()
