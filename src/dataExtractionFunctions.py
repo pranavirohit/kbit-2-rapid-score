@@ -6,36 +6,64 @@ def extractAllText(filePath):
     return text
 
 def cleanTextToList(text, tableType):
-    cleanedData = []
+    cleanedData = createEmptyDataList(tableType)
+    lastUpdatedRawScore = None
+
     allLines = text.splitlines()
     firstLine, lastLine = getNumericalValues(text, tableType) 
-
     selectedLines = allLines[firstLine: lastLine]
-    startingVal, endingVal = rawScoreValues(tableType)
 
-    for i in range(endingVal, startingVal - 1, -1):
-        line = selectedLines[i]
+    for line in selectedLines:
         line = line.strip()
         line = cleanLine(line)
+
         parts = reformatParts(line)
-
-        if len(parts) == 3:
-            parts = addRawScore(parts, i)
-
-        values = createDictionary(line, parts)
-
-        if values is not None:
-            cleanedData.append(values)
+        parts = fillInMissingValues(parts, lastUpdatedRawScore)
+        
+        # Changed to update pre-made dictionary
+        lastUpdated = updateDictionary(line, parts, cleanedData)
+        if lastUpdated != None:
+            lastUpdatedRawScore = lastUpdated
     
     print(cleanedData)
     return cleanedData
 
-def addRawScore(parts, currRawScore):
+def fillInMissingValues(parts, lastUpdated):
+    if len(parts) == 3:
+            # Need to see the last filled row
+            parts = placeholderRawScore(parts, lastUpdated)
+ 
+    return parts
+
+def placeholderRawScore(parts, lastUpdated):
     potentialRange = parts[1]
-    if (potentialRange.find('-') != -1):
-        parts.insert(currRawScore, '0') # Insert 0 as a placeholder value for the
-        # index
+    if (potentialRange.find('-') != -1): # Checking if there's a range value
+        parts.insert(0, int(lastUpdated))
         return parts
+
+def createEmptyDataList(tableType):
+    toPopulate = []
+    startingVal, endingVal = rawScoreValues(tableType)
+    for i in range(endingVal, startingVal - 1, -1):
+        row = ({
+        'Raw': i,
+        'Standard': None,
+        'ConfidenceInterval': None,
+        'Percentile': None,
+        })
+        toPopulate.append(row)
+    
+    return toPopulate
+
+# def allRawScores(dataList):
+#     rawScores = []
+#     rows = len(dataList)
+#     for i in range(rows):
+#         valDict = rows[i]
+#         rawScores.append
+#     for  in dataList:
+
+#     # index into dictionary keys
     
 def reformatParts(line):
     parts = line.split()
@@ -51,7 +79,7 @@ def reformatParts(line):
     
     return result
 
-def createDictionary(line, parts):
+def updateDictionary(line, parts, dataList):
     try: 
         rawScore = int(parts[0])
         standScore = int(parts[1])
@@ -62,13 +90,16 @@ def createDictionary(line, parts):
 
         percentile = checkPercentile(parts[3])
 
-        result = ({
-            'Raw': rawScore,
-            'Standard': standScore,
-            'ConfidenceInterval': confInt,
-            'Percentile': percentile
-        })
-        return result
+        for valDict in dataList: # Indexing into dictionaries, each element is
+            # a dictionary
+            for key in valDict: # Indexing into keys
+                if valDict['Raw'] == rawScore:
+                    valDict['Raw'] = rawScore
+                    valDict['Standard'] = standScore
+                    valDict['ConfidenceInterval'] = confInt
+                    valDict['Percentile'] = percentile
+        
+        return rawScore
     
     except:
         print(f'Skipping line (parse error): {line}')
