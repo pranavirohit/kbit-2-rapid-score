@@ -46,7 +46,44 @@ def testCSVPage(type):
     df = listToDataFrame(cleanedList, type)
     dataFrameToCSV(df, type, output)
 
+# def createCSV():
+    
+def allCSVPages(inputFolder, outputRootFolder):
+    for fileName in os.listdir(inputFolder):
+        if 'nonverbal' in fileName:
+            # Corrected syntax to access page number (recommended by ChatGPT)
+            pageNum = os.path.splitext(fileName)[0][-2:]
+            outputFolder = os.path.join(outputRootFolder, f'page_{pageNum}_all_CSV')
+            filePath = 
+            saveCSV(filePath, 'nonverbal', pageNum, outputFolder)
+        
+        if 'verbal' in fileName:
+            pageNum = os.path.splitext(fileName)[0][-2:]
+
+            csv1, csv2 = None, None
+            joinVerbalFiles
+
+
+# def addNonverbalCSV(dataFolder, outputFolder):
+#     for fileName in os.listdir(dataFolder):
+#         if 'nonverbal' in fileName:
+
+def saveCSV(filePath, tableType, pageNum, outputFolder):
+    text = extractAllText(filePath)
+    cleanedList = cleanTextToList(text, tableType)
+    df = listToDataFrame(cleanedList, tableType)
+    dataFrameToCSV(df, tableType, pageNum, outputFolder)
+
+def createAllFolders(startPage, endPage, outputFolder):
+    for pageNum in range(startPage, endPage + 1):
+        subfolderName = f'page_{pageNum}_all_CSV'
+        subfolderPath = os.path.join(outputFolder, subfolderName)
+        os.makedirs(subfolderPath, exist_ok = True)
+
 def main():
-    testCSVPage('verbal2')
+    # testCSVPage('verbal2')
+    # csvOutputFolder = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\csv_data_files"
+    # createAllFolders(78, 84, csvOutputFolder)
+
 
 main()

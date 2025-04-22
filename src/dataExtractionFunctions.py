@@ -57,16 +57,6 @@ def createEmptyDataList(tableType):
         toPopulate.append(row)
     
     return toPopulate
-
-# def allRawScores(dataList):
-#     rawScores = []
-#     rows = len(dataList)
-#     for i in range(rows):
-#         valDict = rows[i]
-#         rawScores.append
-#     for  in dataList:
-
-#     # index into dictionary keys
     
 def reformatParts(line):
     parts = line.split()
@@ -75,6 +65,12 @@ def reformatParts(line):
     for part in parts:
         part = part.strip()
         part = checkDecimalPoints(part)
+        
+        # Tutorial: https://www.w3schools.com/python/python_regex.asp
+        # Checks replaces any extra characters beyond the expected, the only 
+        # characters remaining should be numbers (0-9), white space (\s), > and .
+        # for decimal points
+        
         part = re.sub(r'[^0-9\s><.-]+', '', part)
 
         if part != '':
@@ -146,12 +142,8 @@ def cleanLine(line):
     line = line.replace('_', ' ')
     line = line.replace('—', '-')
     line = line.replace('=', ' ')
-
-    # Tutorial: https://www.w3schools.com/python/python_regex.asp
-    # Checks replaces any extra characters beyond the expected, the only 
-    # characters remaining should be numbers (0-9), white space (\s), > and .
-    # for decimal points
     line = line.strip()
+
     return line
 
 def checkDecimalPoints(part):

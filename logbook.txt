@@ -257,3 +257,18 @@ values weren't correct
 5. If there are three hyphens, check that the first number in the range is smaller than the
 second number, if not, seperate them
 85 160-148-165. >99.9
+
+## Change to Data Extraction Algorithm
+- Populate the expected dictionary first, then search by keys and update
+
+## Looping through Files
+1. Eventually want to organize everything by age (therefore group things by page, instead of
+table type)
+2. Create a folder within the test_csv_files for each page, then populate it with the CSVs
+for each table type
+3. In a new function, join the verbal1.csv and verbal2.csv for each page into a new CSV,
+then store this
+
+## Progress
+- Significant work on text extraction methods
+- Logic to loop through folders/save final CSV files
