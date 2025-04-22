@@ -16,7 +16,7 @@ def cleanTextToList(text, tableType):
         return []
 
     selectedLines = allLines[firstLine: lastLine]
-    
+
     for line in selectedLines:
         line = cleanLine(line)
 
@@ -58,8 +58,9 @@ def cleanLine(line):
     return line
 
 def checkDecimalPoints(line):
+    i = 1 
     length = len(line)
-    for i in range(1, length - 1):
+    while i < len(line) - 1:
         prevChar = line[i - 1]
         currChar = line[i]
         nextChar = line[i + 1]
@@ -69,6 +70,9 @@ def checkDecimalPoints(line):
             (not nextChar.isdigit())):
 
             line = line[0: i] + line[i + 1:]
+       
+        else:
+            i += 1
     
     return line
 
