@@ -54,10 +54,12 @@ def cleanLine(line):
     # characters remaining should be numbers (0-9), white space (\s), > and .
     # for decimal points
 
-    line = re.sub(r'[^0-9\s><.]+', '', line)
+    line = re.sub(r'[^0-9\s><.-]+', '', line) # Addded dash character to fix error
+    # with ranges
     return line
 
 def checkDecimalPoints(line):
+    # Changed to while loop from for loop to keep track of indices
     i = 1 
     length = len(line)
     while i < len(line) - 1:
