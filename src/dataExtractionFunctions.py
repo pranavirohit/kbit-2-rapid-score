@@ -19,8 +19,7 @@ def cleanTextToList(text, tableType):
 
     for line in selectedLines:
         line = line.strip()
-        line = re.sub(r'[^0-9\s><.-]+', '', line)
-        # line = cleanLine(line)
+        line = cleanLine(line)
 
         
         # line = line.strip()
@@ -63,6 +62,12 @@ def createDictionary(line, parts):
         rawScore = int(parts[0])
         standScore = int(parts[1])
         confInt = parts[2]
+
+        if confInt('-') > 1:
+
+
+        if checkConfidenceInterval(confInt) is not None:
+            rawScore = 
         percentile = checkPercentile(parts[3])
 
         result = ({
@@ -78,10 +83,21 @@ def createDictionary(line, parts):
         return None
 
 def checkPercentile(part):
-    if len(part) == 4:
+    if len(part) == 5:
         return '>99.9'
     else:
         return part
+
+def checkConfidenceInterval(part):
+        values = part.split('-')
+        updatedRawScore = int(values[0])
+        updatedConfInt = f'({values[1]}-{values[2]})'
+        return updatedRawScore, updatedConfInt
+    else:
+        return None
+
+def updateConfidenceInterval(part):
+
     
 def getOnlyDigits(line):
     firstDigit = None
@@ -105,19 +121,19 @@ def getOnlyDigits(line):
     line = line[firstDigit: lastDigit + 1]
     return line
 
-# def cleanLine(line):
-#     line = getOnlyDigits(line)
-#     line = line.replace('|', ' ')
-#     line = line.replace('_', ' ')
-#     line = line.replace('—', '-')
-#     line = line.replace('=', ' ')
-#     lin
+def cleanLine(line):
+    line = getOnlyDigits(line)
+    line = line.replace('|', ' ')
+    line = line.replace('_', ' ')
+    line = line.replace('—', '-')
+    line = line.replace('=', ' ')
 
-#     # Tutorial: https://www.w3schools.com/python/python_regex.asp
-#     # Checks replaces any extra characters beyond the expected, the only 
-#     # characters remaining should be numbers (0-9), white space (\s), > and .
-#     # for decimal points
-#     return line
+    # Tutorial: https://www.w3schools.com/python/python_regex.asp
+    # Checks replaces any extra characters beyond the expected, the only 
+    # characters remaining should be numbers (0-9), white space (\s), > and .
+    # for decimal points
+    line = line.strip()
+    return line
 
 def checkDecimalPoints(part):
     if part.startswith('.'):
