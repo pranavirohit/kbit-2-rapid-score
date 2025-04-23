@@ -1,8 +1,4 @@
-# class Template:
-#     def __init__(self):
-#         app.templateButtons
-#         left, top, width, height = 1257, 930, 595, 100
-#         self.download = (left, top, width, height)
+
 from commonImports import *
 
 class Button:

@@ -1,5 +1,8 @@
 # From: https://academy.cs.cmu.edu/cpcs-docs/screens
 
+app.screenNames = ['start', 'info', 'template', 'upload', 
+                   'output1',
+               'output2', 'output3', 'results', 'end' ]
 from cmu_graphics import *
 
 def onAppStart(app):
@@ -40,7 +43,8 @@ def game_onMousePress(app, mouseX, mouseY):
     if distance(mouseX, mouseY, app.x, app.y) <= app.r:
         app.score += 1
 
-def start_redrawAll(app):
+def start_redrawAll(app): # The format is the screenName_functionName, this is
+    # why switching this changes the initial screen
     drawLabel('Press the circle to increase your score!', 200, 40, size=20)
     drawLabel('Press r to return to the start screen', 200, 60, size=16)
     drawLabel(f'Score: {app.score}', 200, 130, size=16)

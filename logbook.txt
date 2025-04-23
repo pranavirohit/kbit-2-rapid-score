@@ -280,3 +280,6 @@ then store this
 
 ## Future Improvements
 - Algorithm to take participant age and calculate years and months based off of that, instead of asking explicitly for their age in years and months
+
+# Wednesday, April 23rd
+1. Right now, I'm able to get an uploaded file from the user with the columns
