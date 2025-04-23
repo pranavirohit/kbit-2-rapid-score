@@ -9,10 +9,22 @@ def onAppStart(app):
         'template': {
             'downloadBtn': Button('downloadBtn', 327, 416, 300, 50, action = downloadTemplateCSV)
         },
+        'upload': {
+            'uploadBtn': Button('uploadBtn', 343, 415, 270, 50, action = uploadTemplateCSV)
+        },
+        'output1': {
+            'verbalBtn': Button('verbalBtn', 93, 252, 773, 70, action = uploadTemplateCSV)
+        },
         'result': {
-            'resultDownloadBtn': Button('resultDownloadBtn', 370, 460, 220, 50, action = downloadResultCSV)
+            'downloadBtn': Button('resultDownloadBtn', 370, 460, 220, 50, action = downloadResultCSV)
         }
     }
+
+def getButtonWidth(left, top, right, bottom):
+    return right - left
+
+def getButtonHeight(left, top, right, bottom):
+    return bottom - top
 
 def start_redrawAll(app):
     image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Start_Screen.png"
