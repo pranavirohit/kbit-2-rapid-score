@@ -1,7 +1,5 @@
 from commonImports import *
 
-
-
 def onAppStart(app):
     app.screenNames = ['start', 'info', 'template', 'upload', 'output1',
                'output2', 'output3', 'results', 'end' ]
@@ -14,24 +12,28 @@ def start_redrawAll(app):
     drawImage(image, app.cx, app.cy, align = 'center')
     
 def start_onKeyPress(app, key):
-    if key == 'space':
-        setActiveScreen(app.screenNames[1])
+    switchScreens(app, key, 'start')
 
 def info_redrawAll(app):
     image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Screen_2_Info.png"
     drawImage(image, app.cx, app.cy, align = 'center')
 
 def info_onKeyPress(app, key):
-    if key == 'space':
-        setActiveScreen(app.screenNames[2])
-    if key == 'backspace':
-        setActiveScreen(app.screenNames[0])
+    switchScreens(app, key, 'info')
 
 def template_redrawAll(app):
     image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Screen_3_Template.png"
     drawImage(image, app.cx, app.cy, align = 'center')
 
+def switchScreens(app, key, current):
+    index = app.screenNames.index(current)
+    finalIndex = len(app.screenNames) - 1
+    if key == 'space' and index < finalIndex:
+        setActiveScreen(app.screenNames[index + 1])
+    if key == 'backspace' and index < 0:
+        setActiveScreen(app.screenNames[index - 1])
+
 def main():
-    runAppWithScreens(initialScreen='start')
+    runAppWithScreens(initialScreen = 'start')
 
 main()
