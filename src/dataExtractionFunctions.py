@@ -70,7 +70,7 @@ def reformatParts(line):
         # Checks replaces any extra characters beyond the expected, the only 
         # characters remaining should be numbers (0-9), white space (\s), > and .
         # for decimal points
-        
+
         part = re.sub(r'[^0-9\s><.-]+', '', part)
 
         if part != '':
@@ -207,8 +207,8 @@ def listToDataFrame(dataList, tableType):
     df = df.join(cleanedData)
     return df
 
-def dataFrameToCSV(df, tableType, outputFolder):
-    fileName = f'kbit2_{tableType}.csv'
+def dataFrameToCSV(df, tableType, pageNum, outputFolder):
+    fileName = f'{pageNum}_{tableType}.csv'
     filePath = os.path.join(outputFolder, fileName)
     
     # Added folder existence check (recommended by ChatGPT)

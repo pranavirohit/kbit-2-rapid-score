@@ -13,11 +13,11 @@ def onAppStart(app):
             'uploadBtn': Button('uploadBtn', 343, 415, 270, 50, action = uploadTemplateCSV)
         },
         'output1': {
-            'verbalBtn': Button('verbalBtn', 93, 252, 773, 70, action = uploadTemplateCSV)
-        },
-        'result': {
-            'downloadBtn': Button('resultDownloadBtn', 370, 460, 220, 50, action = downloadResultCSV)
+            'verbalSelectAll': createButton('verbalBtn', 93, 252, 866, 322, action = select('verbal', 'all'))
         }
+        # 'result': {
+        #     'downloadBtn': createButton(name, left, top, right, bottom, action)
+        # }
     }
 
 def getButtonWidth(left, top, right, bottom):
@@ -25,6 +25,11 @@ def getButtonWidth(left, top, right, bottom):
 
 def getButtonHeight(left, top, right, bottom):
     return bottom - top
+
+def createButton(name, left, top, right, bottom, action):
+    width = getButtonWidth(left, top, right, bottom)
+    height = getButtonHeight(left, top, right, bottom)
+    return Button(name, left, top, width, height, action)
 
 def start_redrawAll(app):
     image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Start_Screen.png"
