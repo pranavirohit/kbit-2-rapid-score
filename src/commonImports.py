@@ -32,11 +32,11 @@ from dataExtractionFunctions import (
     dataFrameToCSV
 )
 
-from screenInformation import (
-    switchScreens
+from screenComponents import (
+    Button,
 )
 
-from startScreen import (
-    start_redrawAll,
-    start_onKeyPress,
+from screenActions import (
+    downloadTemplateCSV,
+    downloadResultCSV,
 )
