@@ -5,6 +5,8 @@ def onAppStart(app):
                'output2', 'output3', 'result', 'end' ]
     app.width, app.height = 960, 540
     app.cx, app.cy = app.width // 2, app.height // 2
+    app.verbalSelected, app.nonverbalSelected, app.iqSelected = False, False, False
+
     app.buttonsByScreen = {
         'template': {
             'downloadBtn': Button('downloadBtn', 327, 416, 300, 50, action = downloadTemplateCSV)
@@ -13,8 +15,14 @@ def onAppStart(app):
             'uploadBtn': Button('uploadBtn', 343, 415, 270, 50, action = uploadTemplateCSV)
         },
         'output1': {
-            'verbalSelectAll': createButton('verbalBtn', 93, 252, 866, 322, action = select('verbal', 'all'))
+            'verbalSelectAll': createButton('verbalBtn', 93, 252, 866, 322, action = updateCSVCategories(app, 'verbal'))
         }
+        # 'output2': {
+        #     'nonverbalSelectAll': createButton('nonverbalBtn', 93, 252, 866, 322)
+        # },
+        # 'output3': {
+        #     'IQSelectAll': createButton('IQBtn', 93, 252, 866, 322, action = updateIQScreen)
+        # },
         # 'result': {
         #     'downloadBtn': createButton(name, left, top, right, bottom, action)
         # }
@@ -66,7 +74,10 @@ def upload_onKeyPress(app, key):
     switchScreens(app, key, 'upload')
 
 def output1_redrawAll(app):
-    image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Screen_5_Output_Data_1.png"
+    if app.verbalSelected:
+        image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\6.png"
+    else:
+        image = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project\user_experience\KBIT_2_Screen_5_Output_Data_1.png"
     drawImage(image, app.cx, app.cy, align = 'center')
 
 def output1_onKeyPress(app, key):

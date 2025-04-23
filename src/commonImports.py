@@ -40,6 +40,8 @@ from screenActions import (
     downloadTemplateCSV,
     uploadTemplateCSV,
     downloadResultCSV,
+    updateCSVCategories,
+    updateImages
 )
 
 from outputCSV import (
