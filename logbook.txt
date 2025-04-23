@@ -272,3 +272,11 @@ then store this
 ## Progress
 - Significant work on text extraction methods
 - Logic to loop through folders/save final CSV files
+
+## To-Do
+1. Finish game screens
+- Create downloadable file for lab/data processing -> can add more robust 
+- 
+
+## Future Improvements
+- Algorithm to take participant age and calculate years and months based off of that, instead of asking explicitly for their age in years and months
