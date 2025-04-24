@@ -41,11 +41,6 @@ Right now, here's what each function does and where I learned how to build them:
     which I'm now refining with more recent helper functions.
     → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 
-- extractAllText(image):
-    OCR pass using Tesseract, with PSM 6 (treats it like a single block of text).
-    Works best after thresholding. Decided on PSM 6 because of information below.
-    → https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc#options
-
 - getTableAge(image):
     Placeholder — I want this to eventually detect age ranges (like 6:0–6:11)
     so the files are more searchable by range.
@@ -70,7 +65,6 @@ Right now, here's what each function does and where I learned how to build them:
     → Tutorial I learned about kernels from: https://youtu.be/E_NRYxJyZlg
 
 '''
-
 from commonImports import *
 
 def processPDF(pdfPath, pageOutputFolder, tableOutputFolder):

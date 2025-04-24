@@ -7,10 +7,7 @@ a quick visual check to confirm if the line detection is working properly, as
 I wasn't getting the expected 9 vertical lines I needed, which would tell me 
 how to divide the page into three tables.
 
-→ Requires CMU Graphics + my helper functions in commonImports.py
-
 '''
-
 from commonImports import *
 
 def onAppStart(app):
@@ -20,9 +17,9 @@ def onAppStart(app):
 def redrawAll(app):
     drawImage(app.filePath, 0, 0)
     
-    for i in range(len(app.rectangles)):
-        (left, top, width, height) = app.rectangles[i]
+    for left, top, width, height in app.rectangles:
         print(left)
-        drawRect(left, top, 10, height, fill = 'red')
+        lineWidth = 10
+        drawRect(left, top, lineWidth, height, fill = 'red')
         
 runApp()

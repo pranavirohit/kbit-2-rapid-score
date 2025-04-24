@@ -1,3 +1,96 @@
+'''
+KBIT-2 Text Extraction and Cleaning Helpers
+
+This file has the main functions I'm using to extract, clean, and structure 
+table data from the KBIT-2 scoring pages after OCR. The goal is to go from 
+messy OCR output to a clean list of rows that can be saved as a CSV.
+
+Each function helps clean and parse the values from scanned table images, 
+especially handling edge cases like missing raw scores, weird formatting 
+of confidence intervals, and OCR misreads. I developed each function after
+looking through the outputs and recognizing common patterns in errors. See 
+my logbook for my notes on this.  
+
+Here's what each function does and how I built them:
+
+- extractAllText(image):
+    OCR pass using Tesseract, with PSM 6 (treats it like a single block of text).
+    Works best after thresholding. Decided on PSM 6 because of information below.
+    → https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc#options
+
+- cleanTextToList(text, tableType):
+    Main function for turning OCR output into a cleaned list of dictionaries. 
+    Finds the lines that matter, splits each into parts, handles missing values, 
+    and fills in a pre-built dictionary for each raw score.
+
+- fillInMissingValues(parts, lastUpdated):
+    If a line is missing the raw score (common after OCR), this fills it in 
+    based on the last seen value. Uses placeholderRawScore to insert the fix.
+
+- placeholderRawScore(parts, lastUpdated):
+    Inserts a raw score value that's one less than the last updated one. 
+    Used to fix rows where OCR missed the raw score entirely.
+
+- updateDictionary(line, parts, dataList):
+    Tries to parse the 4 expected values (raw score, standard score, CI, percentile)
+    and match them to the right row in the pre-built dictionary. Handles edge cases 
+    like when raw score is accidentally stuck to the confidence interval.
+
+- createEmptyDataList(tableType):
+    Creates a full list of dictionaries for each expected raw score (depending on 
+    table type). These get filled in later by updateDictionary, as the rows are read
+    in from the file with OCR.
+
+- reformatParts(line):
+    Splits a cleaned line into individual score values. Applies checkDecimalPoints 
+    and uses regex to remove unexpected OCR characters — keeping only digits (0–9), 
+    whitespace (\s), dots (.), and greater-than signs (>).
+    → https://www.w3schools.com/python/python_regex.asp
+
+- cleanLine(line):
+    Does a first pass at cleaning. Strips extra characters like pipes, underscores, 
+    or long dashes, and isolates just the digits.
+
+- getNumericalValues(text, tableType):
+    Finds which lines in the OCR text actually contain the table values. 
+    Returns the start and end index so we can extract only the useful part.
+    → Recommended by ChatGPT: String conversion as one of the checks 
+
+- checkConfidenceInterval(part):
+    Deals with lines where the raw score and confidence interval were joined.
+    Extracts both cleanly.
+
+- checkPercentile(part):
+    Fixes the special case where the percentile is OCR'd as a 5-character string 
+    like '9999>' or '99.9>' and returns it as '>99.9'.
+
+- checkDecimalPoints(part):
+    Fixes common OCR issues where decimals get cut off at the beginning or end.
+
+- isValidLength(line):
+    Checks whether a line has exactly 4 parts (the expected number). Used 
+    to help catch bad OCR rows.
+
+- rawScoreValues(tableType):
+    Returns the expected raw score range for the given table type 
+    ('verbal1', 'verbal2', 'nonverbal').
+
+- createDataFrame(tableType):
+    Builds a Pandas DataFrame with raw scores as the index, to match later 
+    with cleaned data.
+    → https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
+
+- listToDataFrame(dataList, tableType):
+    Joins the cleaned list of score data with a raw-score-indexed DataFrame.
+    → https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
+    → https://pandas.pydata.org/docs/user_guide/merging.html#joining-on-index
+    
+- dataFrameToCSV(df, tableType, pageNum, outputFolder):
+    Saves the final cleaned DataFrame to a CSV in the output folder. 
+    Automatically creates the folder if it doesn't exist.
+    → Recommended by ChatGPT: Check that folder exists
+
+'''
 from commonImports import *
 
 def extractAllText(filePath):
@@ -21,7 +114,7 @@ def cleanTextToList(text, tableType):
         parts = fillInMissingValues(parts, lastUpdatedRawScore)
         print(parts)
         
-        # Changed to update pre-made dictionary
+        # Changed to update pre-made dictionary, based on fixed raw scores
         lastUpdated = updateDictionary(line, parts, cleanedData)
         if lastUpdated != None:
             lastUpdatedRawScore = lastUpdated
@@ -31,17 +124,15 @@ def cleanTextToList(text, tableType):
 
 def fillInMissingValues(parts, lastUpdated):
     if len(parts) == 3:
-            # Need to see the last filled row
-            print(f'parts: {parts}, lastUpdated: {lastUpdated}')
+            # print(f'parts: {parts}, lastUpdated: {lastUpdated}')
             parts = placeholderRawScore(parts, lastUpdated)
             # print(f'after parts: {parts}, lastUpdated: {lastUpdated}')
     return parts
 
 def placeholderRawScore(parts, lastUpdated):
     potentialRange = parts[1]
-    if (potentialRange.find('-') != -1): # Checking if there's a range value
-        parts.insert(0, str(lastUpdated - 1)) # It was missing the -1 here every
-        # time I update the last updated!!!
+    if (potentialRange.find('-') != -1):
+        parts.insert(0, str(lastUpdated - 1)) 
         return parts
 
 def createEmptyDataList(tableType):
@@ -67,10 +158,6 @@ def reformatParts(line):
         part = checkDecimalPoints(part)
         
         # Tutorial: https://www.w3schools.com/python/python_regex.asp
-        # Checks replaces any extra characters beyond the expected, the only 
-        # characters remaining should be numbers (0-9), white space (\s), > and .
-        # for decimal points
-
         part = re.sub(r'[^0-9\s><.-]+', '', part)
 
         if part != '':
@@ -89,8 +176,7 @@ def updateDictionary(line, parts, dataList):
 
         percentile = checkPercentile(parts[3])
 
-        for valDict in dataList: # Indexing into dictionaries, each element is
-            # a dictionary
+        for valDict in dataList:
             if valDict['Raw'] == rawScore:
                 valDict['Raw'] = rawScore
                 valDict['Standard'] = standScore
@@ -197,14 +283,19 @@ def createDataFrame(tableType):
     startingVal, endingVal = rawScoreValues(tableType)
     rawScores = list(range(startingVal, endingVal - 1, -1))
     df = pd.DataFrame({'Raw': rawScores})
+    
+    # Tutorial: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
     df.set_index('Raw', inplace=True)
     return df
 
 def listToDataFrame(dataList, tableType):
     df = createDataFrame(tableType)
     cleanedData = pd.DataFrame(dataList)
+
+    # Tutorial: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
     cleanedData.set_index('Raw', inplace=True)
     df = df.join(cleanedData)
+    
     return df
 
 def dataFrameToCSV(df, tableType, pageNum, outputFolder):
