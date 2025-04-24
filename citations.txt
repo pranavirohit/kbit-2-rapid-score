@@ -35,3 +35,391 @@ https://docs.opencv.org/
 ### Tesseract OCR Windows Installer (UB Mannheim)
 https://digi.bib.uni-mannheim.de/tesseract/
 https://github.com/tesseract-ocr/tesseract
+
+
+# Wednesday, April 23rd
+## Docstrings for All Functions 
+
+---------------------------------------------------------------------------------------------------
+dataExtractionFunctions.py 
+---------------------------------------------------------------------------------------------------
+
+KBIT-2 Text Extraction and Cleaning Helpers
+
+This file has the main functions I'm using to extract, clean, and structure 
+table data from the KBIT-2 scoring pages after OCR. The goal is to go from 
+messy OCR output to a clean list of rows that can be saved as a CSV.
+
+Each function helps clean and parse the values from scanned table images, 
+especially handling edge cases like missing raw scores, weird formatting 
+of confidence intervals, and OCR misreads. I developed each function after
+looking through the outputs and recognizing common patterns in errors. See 
+my logbook for my notes on this.  
+
+Here's what each function does and how I built them:
+
+- extractAllText(image):
+    OCR pass using Tesseract, with PSM 6 (treats it like a single block of text).
+    Works best after thresholding. Decided on PSM 6 because of information below.
+    → https://github.com/tesseract-ocr/tesseract/blob/main/doc/tesseract.1.asc#options
+
+- cleanTextToList(text, tableType):
+    Main function for turning OCR output into a cleaned list of dictionaries. 
+    Finds the lines that matter, splits each into parts, handles missing values, 
+    and fills in a pre-built dictionary for each raw score.
+
+- fillInMissingValues(parts, lastUpdated):
+    If a line is missing the raw score (common after OCR), this fills it in 
+    based on the last seen value. Uses placeholderRawScore to insert the fix.
+
+- placeholderRawScore(parts, lastUpdated):
+    Inserts a raw score value that's one less than the last updated one. 
+    Used to fix rows where OCR missed the raw score entirely.
+
+- updateDictionary(line, parts, dataList):
+    Tries to parse the 4 expected values (raw score, standard score, CI, percentile)
+    and match them to the right row in the pre-built dictionary. Handles edge cases 
+    like when raw score is accidentally stuck to the confidence interval.
+
+- createEmptyDataList(tableType):
+    Creates a full list of dictionaries for each expected raw score (depending on 
+    table type). These get filled in later by updateDictionary, as the rows are read
+    in from the file with OCR.
+
+- reformatParts(line):
+    Splits a cleaned line into individual score values. Applies checkDecimalPoints 
+    and uses regex to remove unexpected OCR characters — keeping only digits (0–9), 
+    whitespace (\s), dots (.), and greater-than or less-than signs (>, <).
+    → https://www.w3schools.com/python/python_regex.asp
+
+- cleanLine(line):
+    Does a first pass at cleaning. Strips extra characters like pipes, underscores, 
+    or long dashes, and isolates just the digits.
+
+- getNumericalValues(text, tableType):
+    Finds which lines in the OCR text actually contain the table values. 
+    Returns the start and end index so we can extract only the useful part.
+    → Recommended by ChatGPT: String conversion as one of the checks 
+
+- checkConfidenceInterval(part):
+    Deals with lines where the raw score and confidence interval were joined.
+    Extracts both cleanly.
+
+- checkPercentile(part):
+    Fixes the special case where the percentile is OCR'd as a 5-character string 
+    like '9999>' or '99.9>' and returns it as '>99.9'.
+
+- checkDecimalPoints(part):
+    Fixes common OCR issues where decimals get cut off at the beginning or end.
+
+- isValidLength(line):
+    Checks whether a line has exactly 4 parts (the expected number). Used 
+    to help catch bad OCR rows.
+
+- rawScoreValues(tableType):
+    Returns the expected raw score range for the given table type 
+    ('verbal1', 'verbal2', 'nonverbal').
+
+- createDataFrame(tableType):
+    Builds a Pandas DataFrame with raw scores as the index, to match later 
+    with cleaned data.
+    → https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
+
+- listToDataFrame(dataList, tableType):
+    Joins the cleaned list of score data with a raw-score-indexed DataFrame.
+    → https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html
+    → https://pandas.pydata.org/docs/user_guide/merging.html#joining-on-index
+    
+- dataFrameToCSV(df, tableType, pageNum, outputFolder):
+    Saves the final cleaned DataFrame to a CSV in the output folder. 
+    Automatically creates the folder if it doesn't exist.
+    → Recommended by ChatGPT: Check that folder exists after I asked how I could
+    program for potential errors
+
+---------------------------------------------------------------------------------------------------
+debuggingFunctions.py 
+---------------------------------------------------------------------------------------------------
+KBIT-2 Visual Line Debugger
+
+This file opens a KBIT-2 test page and overlays red rectangles on top of all
+the vertical lines detected by getVerticalLinesPositions(). It's meant to be
+a quick visual check to confirm if the line detection is working properly, as
+I wasn't getting the expected 9 vertical lines I needed, which would tell me 
+how to divide the page into three tables.
+
+---------------------------------------------------------------------------------------------------
+imageImport.py 
+---------------------------------------------------------------------------------------------------
+
+KBIT-2 Page Processor
+
+This file is part of my KBIT-2 automation pipeline. It takes the scanned KBIT-2 scoring PDF 
+(pages 78–84 from the test manual) and converts each page into a high-resolution PNG. 
+From there, it uses helper functions to crop out the individual Verbal and Nonverbal tables, 
+then runs OCR (Tesseract) on a test table image to extract the raw text. That text is cleaned 
+and structured into a DataFrame, then saved as a CSV. 
+
+Right now, this script already handles the full process for one test image: 
+PDF conversion, table cropping, text extraction, data cleaning, and CSV output. 
+
+Next, I plan to scale this to batch process all table images, saving cleaned CSVs for every page 
+and renaming them so they reference the age range for the table, since that's what drives
+most of the scoring values.
+
+This file relies heavily on helper functions from imageProcessingFunctions.py for the image 
+pipeline and dataExtractionFunctions.py for turning OCR output into usable structured data.
+
+Here's what each function does:
+
+- saveAllKBITPages():
+    Uses processPDF to convert the PDF to page images and crops out table images.
+    Then runs OCR on one test image (verbal1_page_78.png) and prints the result.
+
+- testCSVPage(type):
+    Tests the full pipeline from OCR to CSV on a single table image 
+    (verbal2_page_80.png). Saves the output CSV to the test folder.
+
+- saveCSV(filePath, tableType, pageNum, outputFolder):
+    Full pipeline on a provided table image: runs OCR, cleans the text,
+    formats the data into a DataFrame, and saves it to CSV.
+
+- createAllFolders(startPage, endPage, outputFolder):
+    Creates folders named page_XX_all_CSV to organize outputs by page.
+    Useful for pre-organizing batch CSV outputs.
+
+- main():
+    Runs testCSVPage('verbal2') to test pipeline on one image.
+    Commented-out code shows how to pre-generate output folders for pages 78–84.
+
+---------------------------------------------------------------------------------------------------
+imageProcessingFunctions.py 
+---------------------------------------------------------------------------------------------------
+KBIT-2 Table Processing Helpers
+
+This file has the main helper functions I'm using to automate KBIT-2 scoring.
+With these functions, I want to turn a scanned PDF of KBIT-2 scoring pages into 
+clean, labeled PNGs, to isolate just the columns I need and running OCR on them.
+
+Right now, here's what each function does and where I learned how to build them:
+
+- processPDF(pdfPath, outputFolder):
+    Converts a scanned PDF (starting at page 78 of the book) into high-res PNGs.
+    Saves the full page images and also runs table splitting + saving through the
+    saveTablesFromPage.
+    → https://pypi.org/project/pdf2image/
+    → https://pillow.readthedocs.io/en/stable/reference/Image.html
+
+- saveTablesFromPage(filePath, tableOutputFolder, pageNum):
+    Takes a full-page PNG, finds vertical lines, splits the image into Verbal Table 1,
+    Verbal Table 2, and the Nonverbal Table, and saves each as its own PNG.
+    Uses splitThreeTables and getVerticalLinesPositions helper functions.
+
+- splitThreeTables(filePath, linePos):
+    Crops the full PNG image into three separate table images:
+    Verbal Table 1, Verbal Table 2, and Nonverbal Table.
+    Uses midpoints between vertical line positions to crop columns,
+    then processes each cropped region for OCR. Assumes linePos has 
+    at least 9 sorted x-coordinates, mapped to each of the 9 vertical
+    lines in the original table.
+    → This will eventually replace splitImage() with more accurate cropping.
+
+- splitImage(filePath):
+    Splits the page into Verbal and Nonverbal tables by column.
+    I assume a 2:1 layout ratio for now — just enough for early testing.
+    This function will be replaced by the splitThreeTables(filePath, linePos)
+    function which I am currently working on.
+
+- processImage(array):
+    Takes a NumPy array (grayscale) and applies binary thresholding
+    to help Tesseract read it more cleanly. Converts back to a PIL image
+    so Tesseract can process this. I used this for the initial text extraction,
+    which I'm now refining with more recent helper functions.
+    → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+
+- getTableAge(image):
+    Placeholder — I want this to eventually detect age ranges (like 6:0–6:11)
+    so the files are more searchable by range.
+
+- getVerticalLinesPositions(filePath):
+    Isolates all the vertical lines in the image and returns their bounding boxes
+    as (left, top, width, height). Will use these to crop specific tables next.
+    → https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
+    → Tutorial I adapted this from: https://youtu.be/E_NRYxJyZlg
+    → See my notes on algorithim development in logbook.txt
+
+- thresholdImage(filePath):
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
+    Just converts an image into black/white (inverted) using thresholding.
+    This creates the binary mask that helps us isolate lines.
+    → https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
+
+- isolateVerticalLines(image):
+    One of the primary helper functions for getVerticalLinesPositions(filePath).
+    Uses a vertical kernel to extract only the vertical lines using 
+    morphological operations (OpenCV's morphologyEx with a tall filter).
+    → Tutorial I learned about kernels from: https://youtu.be/E_NRYxJyZlg
+
+---------------------------------------------------------------------------------------------------
+screenActions.py 
+---------------------------------------------------------------------------------------------------
+Template, Upload, and Output Actions
+
+This file contains the main action functions used across the KBIT-2 UI 
+for downloading files, uploading filled-in templates, updating category selection, 
+and rendering the correct output screen image based on user choices. 
+These are the functions connected to UI buttons in the app.
+
+Here's the functions that I got from ChatGPT:
+
+- downloadTemplateCSV(app):
+    Opens a file dialog to let the user save a blank KBIT-2 scoring template 
+    (Excel format). Copies the default template to the selected destination.
+    → Code by ChatGPT: This function is written, in its entirety, by ChatGPT
+    I hope in the future to become more familiar with folder/system-OS based
+    libraries!
+
+- uploadTemplateCSV(app):
+    Opens a file dialog for the user to select a filled-in template 
+    (CSV or Excel). Stores the uploaded path in the app and updates 
+    app.fileUploaded to True.
+    → Code by ChatGPT: This function is written, in its entirety, by ChatGPT.
+    I hope in the future to become more familiar with folder/system-OS based
+    libraries!
+
+- downloadResultCSV(app):
+    Opens a file dialog to save the final processed results. 
+    If the result file exists, it copies it to the location the user chooses. 
+    Includes error handling and feedback if saving is canceled or fails.
+    → Code by ChatGPT: This function is written, in its entirety, by ChatGPT
+    I hope in the future to become more familiar with folder/system-OS based
+    libraries!
+
+Here's the functions that I wrote:
+- updateCSVCategories(app, testType):
+    Updates the app's selection state based on which category (verbal, 
+    nonverbal, or iq) the user selects. Used when clicking the 'Select All' 
+    buttons for each output screen.
+
+- getOutputImage(app, screen):
+    Returns the path to the correct output image for a given screen 
+    ('output1', 'output2', or 'output3') based on whether the corresponding 
+    category has been selected. 
+
+- loadHomescreen(app):
+    Resets the app view to the first screen ('start') by calling setActiveScreen.
+
+---------------------------------------------------------------------------------------------------
+screenComponents.py
+---------------------------------------------------------------------------------------------------
+Button Class for UI Interactions
+
+This file defines a simple Button class used in my KBIT-2 UI screens. 
+Each button stores its position, dimensions, label (name), and an optional action 
+function that gets called when the button is clicked.
+
+The class handles basic hit detection based on mouse coordinates 
+and delegates click behavior through the provided action function.
+
+Class and method breakdown:
+
+- __init__(name, left, top, width, height, action = None):
+    Sets up a button with its display label, position, size, and an optional
+    action function to trigger when the button is clicked.
+
+- isClicked(mouseX, mouseY):
+    Returns True if the mouse click falls within the button's rectangular area.
+
+- handleClick(app):
+    If the button has an assigned action, this calls it and passes in the app.
+
+---------------------------------------------------------------------------------------------------
+screenHelpers.py 
+---------------------------------------------------------------------------------------------------
+UI Button, Screen Helpers
+
+This file includes helper functions for working with buttons and switching screens 
+in my KBIT-2 interface. It handles button creation, click detection, and logic 
+for moving between different app screens (like start, input, results, etc.).
+
+Here's what each function does:
+
+- getButtonWidth(left, top, right, bottom):
+    Returns the width of a button based on its bounding box.
+
+- getButtonHeight(left, top, right, bottom):
+    Returns the height of a button based on its bounding box.
+
+- createButton(name, left, top, right, bottom, action):
+    Creates a Button object using bounding box coordinates. Automatically calculates
+    width and height before the button is initialized. I used this function because
+    I relied on the pixel coordinates from the UI images I created when placing buttons.
+
+- switchScreens(app, key, screen):
+    Handles moving forward or backward through screens based on the key pressed.
+    Calls both prevScreen and nextScreen to check for valid transitions.
+
+- nextScreen(app, key, screen):
+    If the current screen isn't the last one and the space key is pressed,
+    moves to the next screen in app.screenNames.
+
+- prevScreen(app, key, screen):
+    If the current screen isn't the first one and the backspace key is pressed,
+    moves to the previous screen in app.screenNames.
+
+- getScreenIndex(app, screen):
+    Helper function that returns the index of the current screen and 
+    the index of the final screen in the screen list.
+
+- clickButtons(app, screen, mouseX, mouseY):
+    Checks all button objects on the current screen. If one is clicked, 
+    it calls the button's handleClick method to trigger its action.
+    → Recommended by ChatGPT: Use .values() shorthand instead of another loop
+    to go through each button and check if it's clicked
+
+---------------------------------------------------------------------------------------------------
+screenInformation.py 
+---------------------------------------------------------------------------------------------------
+KBIT-2 App Screens and UI Routing
+
+This file defines the main screen flow and UI interactions for the KBIT-2 scoring 
+interface. It sets up the list of screens used in the app, initializes app-wide 
+variables (like which categories are selected or whether a file has been uploaded), 
+and maps each screen to its background image and clickable button regions. 
+
+Function breakdown:
+
+- onAppStart(app):
+    Initializes the app's screen size, button states, and screen order.
+    Defines all buttons for each screen using pixel coordinates pulled 
+    from UI mockups.
+    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
+    → Recommended by ChatGPT: Use lambda function to delay screen change
+    until button is clicked. Prior to this, when I tested the screens, 
+    the screens would appear as if the buttons were already clicked, even 
+    if I hadn't yet.
+
+- [screen]_redrawAll(app):
+    Loads and displays the background image for a given screen. If the
+    screen is an output screen, where the user can select which categories
+    they want to use in their result CSV, it uses 
+    getOutputImage(app, screen) to load the correct image file path.
+    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
+
+- [screen]_onKeyPress(app, key):
+    Handles navigation between screens. Uses switchScreens to move 
+    forward or backward depending on the key pressed. 
+    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
+
+- [screen]_onMousePress(app, mouseX, mouseY):
+    Checks if any buttons were clicked on the screen and calls their 
+    associated action using clickButtons.
+    → Recommended by ChatGPT: Use a single function to do this for all screens.
+    Originally, I had used the same code/logic for each individual onMousePress,
+    which I changed to a global function after asking for feedback on the 
+    structure of my code. 
+
+These functions exist for all screens:
+'start', 'info', 'template', 'upload', 'output1', 'output2', 'output3', 
+'result', and 'end'.
+
+-------------------------------------------------------------------------------
