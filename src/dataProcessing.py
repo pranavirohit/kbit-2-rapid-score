@@ -17,6 +17,6 @@ Here's what each function does:
     table to be displayed or saved.
 
 '''
-from commonImports import *
+
 def processUploadedFile(app, filePath):
     return 42

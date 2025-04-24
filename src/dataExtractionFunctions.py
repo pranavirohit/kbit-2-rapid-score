@@ -1,3 +1,7 @@
+'''
+Used ChatGPT to reformat all lines to < 80 characters.
+No changes to the actual code structure were made.
+'''
 from commonImports import *
 
 def extractAllText(filePath):

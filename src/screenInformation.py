@@ -1,49 +1,5 @@
 from commonImports import *
-'''
-KBIT-2 App Screens and UI Routing
 
-This file defines the main screen flow and UI interactions for the KBIT-2 scoring 
-interface. It sets up the list of screens used in the app, initializes app-wide 
-variables (like which categories are selected or whether a file has been uploaded), 
-and maps each screen to its background image and clickable button regions. 
-
-Function breakdown:
-
-- onAppStart(app):
-    Initializes the app's screen size, button states, and screen order.
-    Defines all buttons for each screen using pixel coordinates pulled 
-    from UI mockups.
-    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
-    → Recommended by ChatGPT: Use lambda function to delay screen change
-    until button is clicked. Prior to this, when I tested the screens, 
-    the screens would appear as if the buttons were already clicked, even 
-    if I hadn't yet.
-
-- [screen]_redrawAll(app):
-    Loads and displays the background image for a given screen. If the
-    screen is an output screen, where the user can select which categories
-    they want to use in their result CSV, it uses 
-    getOutputImage(app, screen) to load the correct image file path.
-    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
-
-- [screen]_onKeyPress(app, key):
-    Handles navigation between screens. Uses switchScreens to move 
-    forward or backward depending on the key pressed. 
-    → CMU Graphics Demos, Screens: https://drive.google.com/file/d/1VYohB0BBTMDXkcSet0ybSIXWYztXXonp/view
-
-- [screen]_onMousePress(app, mouseX, mouseY):
-    Checks if any buttons were clicked on the screen and calls their 
-    associated action using clickButtons.
-    → Recommended by ChatGPT: Use a single function to do this for all screens.
-    Originally, I had used the same code/logic for each individual onMousePress,
-    which I changed to a global function after asking for feedback on the 
-    structure of my code. 
-
-These functions exist for all screens:
-'start', 'info', 'template', 'upload', 'output1', 'output2', 'output3', 
-'result', and 'end'.
-
-'''
 def onAppStart(app):
     app.screenNames = [
         'start', 'info', 'template', 'upload', 'output1',
@@ -57,7 +13,8 @@ def onAppStart(app):
     app.iqSelected = False
     app.fileUploaded = False
 
-    # Added use of lambda function to delay screen change until button was clicked
+    # Added use of lambda function to delay screen change until button 
+    # was clicked (recommended by ChatGPT)
     # Retrieved clickable areas by uploading images to a pixel selector tool
 
     app.buttonsByScreen = {
