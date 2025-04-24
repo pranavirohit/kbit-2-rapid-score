@@ -57,10 +57,6 @@ from screenHelpers import (
     clickButtons
 )
 
-from outputCSV import (
-    Categories
-)
-
 from dataProcessing import (
     processUploadedFile
 )
