@@ -39,7 +39,7 @@ Function breakdown:
     which I changed to a global function after asking for feedback on the 
     structure of my code. 
 
-These functions exist for all screens in the flow:
+These functions exist for all screens:
 'start', 'info', 'template', 'upload', 'output1', 'output2', 'output3', 
 'result', and 'end'.
 
