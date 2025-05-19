@@ -283,3 +283,10 @@ then store this
 
 # Wednesday, April 23rd
 1. Right now, I'm able to get an uploaded file from the user with the columns
+
+# Monday, May 15th
+
+## To-Do
+1. Go through code files, understand project/where you left off
+2. Delete/organize any old files
+3. Remember to scan KBIT-2 book pages tomorrow
