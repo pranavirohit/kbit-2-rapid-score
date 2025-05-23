@@ -290,3 +290,18 @@ then store this
 1. Go through code files, understand project/where you left off
 2. Delete/organize any old files
 3. Remember to scan KBIT-2 book pages tomorrow
+
+# Tuesday, May 20th
+
+## Meeting Notes
+1. Keep existing idea to have an input file, then create existing output file
+2. Add a tab in the Excel sheet that's formatted exactly like the BehavioralBattery.xlsx
+3. Compare the manually entered values from BehavioralBattery.xlsx file to generated 
+values from KBIT-2 Rapid Score, the goal is to check for any discrepancies and see why 
+they are happening
+4. Currently, patient age is calculated as a decimal (ex. 28.36) or by age in months
+5. Date of birth is usually represented by DOB, and the date stored is the test date
+
+## Patient Age Algorithm
+- Find total months, based on test date, and then integer divide to get the age, and
+use modulus to get the months
