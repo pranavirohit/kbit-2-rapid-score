@@ -29,26 +29,11 @@ def createAllFolders(startPage, endPage, outputFolder):
         os.makedirs(subfolderPath, exist_ok=True)
 
 def main():
-    # File paths for Table B.1
-
-    # File path to PDF containing all Table B.1 images
-    b1Pdf = (
-        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 "
-        r"Rapid Score\kbit_table_1_pages_78_127.pdf"
-    )
-
-    # File path to folder where PNGs of Table B.1 PDF pages will be saved
-    b1ImageFolder = (
+    b1PrelimCSVs = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
-        r"\kbit-2_rapid_score\table_1\page_images"
+        r"\KBIT-2 Rapid Score\test_1\output_CSVs"
     )
 
-    # File path to folder where cropped Table B.1 images will be saved
-    b1SplitImageFolder = (
-        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
-        r"\kbit-2_rapid_score\table_1\thresholded_split_images"
-    )
-
-    saveAllTable1Pages(b1Pdf, b1ImageFolder, b1SplitImageFolder)
+    createAllFolders(78, 127, b1PrelimCSVs)
 
 main()
