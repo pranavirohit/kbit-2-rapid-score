@@ -5,27 +5,35 @@ Audio_040625
 Video_040625
 
 - Refined the goal and scope of my project: to automate scoring for the KBIT-2  
-  intelligence test by using OCR to extract information from standardized tables,  
+  intelligence test by using OCR to extract information from standardized 
+tables,  
   particularly Table B1.  
-- Followed a systematic approach to understand the scoring logic by labeling each  
+- Followed a systematic approach to understand the scoring logic by labeling 
+each  
   score component (A1–F3) and tracing how each one is derived:  
     - A1–A3 represent raw input scores from the test.  
     - B1 and B2 are sums of the raw scores.  
-    - C1–C6 (standard scores, confidence intervals, and percentiles) are derived from  
+    - C1–C6 (standard scores, confidence intervals, and percentiles) are derived
+ from  
       Table B1.  
     - D1A and D1B are percentile-based descriptions also from the same table.  
     - F1–F3 relate to composite IQ and descriptive categories.  
 
-[K-BIT2 Scoring](https://www.notion.so/K-BIT2-Scoring-1cd5c24faeb080ce9fe8d882825b6d2d?pvs=21)
+[K-BIT2 Scoring](https://www.notion.so/K-BIT2-Scoring-
+1cd5c24faeb080ce9fe8d882825b6d2d?pvs=21)
 
-- Identified that Table B1 (verbal and nonverbal standard score conversions) is the  
+- Identified that Table B1 (verbal and nonverbal standard score conversions) is 
+the  
   most complex and essential for automation.  
-- Documented the workflow for score calculation in a table with explanations of how  
+- Documented the workflow for score calculation in a table with explanations of 
+how  
   each value is derived.  
 - Determined that future development should focus on:  
     - Extracting data programmatically from Table B1 (likely with OCR).  
-    - Creating a system that auto-generates the full score profile based on raw scores.  
-    - Allowing users to customize output (e.g. export as spreadsheet, select fields,  
+    - Creating a system that auto-generates the full score profile based on raw 
+scores.  
+    - Allowing users to customize output (e.g. export as spreadsheet, select 
+fields,  
       or print).  
 
 ### Next Steps
@@ -36,26 +44,33 @@ Video_040625
     - [ ]  Learn more about optical character recognition  
         - Which library to use? How will this interact with OpenCV?  
     - Office Hour Questions  
-        1. Aim to store all the data values, store this (memoization?), and then access  
+        1. Aim to store all the data values, store this (memoization?), and then
+ access  
            this for each participant?  
         2. Features of the application
 
 # Saturday, April 19th
 
 ## Brain Dump
-1. Need a way to convert the PDF with all the Table 1 scans into images that can be processed
-2. Basically take the scanned PDF, seperate each image, process each image through OCR
+1. Need a way to convert the PDF with all the Table 1 scans into images that can
+ be processed
+2. Basically take the scanned PDF, seperate each image, process each image 
+through OCR
 (OCR is what makes it gray scale), then use tesseract to do text extraction
-3. Not entirely sure yet on how I want to store the data/what data structure I want to use
-4. But data extracted should be seperated by age and month, since that's what determines the
+3. Not entirely sure yet on how I want to store the data/what data structure I 
+want to use
+4. But data extracted should be seperated by age and month, since that's what 
+determines the
 other unique parameters of the test
 
 ## Processing Code Output
-Table B.1: Verbal and Nonverbal Standard Scores, Confidence Intervals, and Percentile Ranks
+Table B.1: Verbal and Nonverbal Standard Scores, Confidence Intervals, and 
+Percentile Ranks
 | Ages 4:4-4:5 4:4-4:5
 VERBAL NONVERBAL
 Stand. 90% ile Raw | Stand. 90% ile Stand. 90%
-Score | Score Conf. int. Rank Score | Score Conf. Int. Rank Score | Score Conf. Int. rile
+Score | Score Conf. int. Rank Score | Score Conf. Int. Rank Score | Score Conf. 
+Int. rile
 108 | 160 148-165 >99.9 51 145 134-151 99.9 46 160 142-164 =k
 107. | 160 148-165 >99.9 50 144 133-150 99.8 45 160 142-164 2229
 106 | 160 148-165 >99.9 49 143 132-149 99.8 44 160 142-164 2008
@@ -118,14 +133,17 @@ ae
 
 ## Redefining Pipeline
 1. Have the PDF with all the Table B.1 pages
-2. To use OCR, I need to convert all the PDF pages to their PNG versions -> contain this in
+2. To use OCR, I need to convert all the PDF pages to their PNG versions -> 
+contain this in
    processPDF()
-3. Then, to extract meaningful data, I need to split these PNG images into the verbal and
+3. Then, to extract meaningful data, I need to split these PNG images into the 
+verbal and
    nonverbal tables
 4. Finally, I need to extract the text
 
 ### Splitting Image to Extract Table Data
-1. Assuming I have a PNG of the table file, I want to split it into the three tables on the
+1. Assuming I have a PNG of the table file, I want to split it into the three 
+tables on the
    page. I plan to do this by looking for vertical lines:
 
 Verbal (Table 1):  
@@ -138,9 +156,12 @@ Nonverbal (Table 3):
 Start Line: 7, End Line: 9
 
 2. Then, I want to find the location for each of the vertical lines  
-3. Using the location for each, I want to create three new PNGs, store them in a new folder  
-4. Then, I want to create an algorithm to extract the text from each of these pages. This is
-   easier, because it's just recognizing the same four columns and turning it into a data
+3. Using the location for each, I want to create three new PNGs, store them in a
+ new folder  
+4. Then, I want to create an algorithm to extract the text from each of these 
+pages. This is
+   easier, because it's just recognizing the same four columns and turning it 
+into a data
    structure I can run this on all the images for.
 
 ## Finding Location of Vertical Lines
@@ -150,20 +171,26 @@ Tutorial: https://www.youtube.com/watch?v=E_NRYxJyZlg
   interested in (usually white)
 - Erosion: Removing elements
 - Dilation: Expanding or growing elements
-- Kernels: What you specify, this is how you decide how to change the image to create the
+- Kernels: What you specify, this is how you decide how to change the image to 
+create the
   mask you want
 
 This is the algorithm I want to implement based on the video:
 
-1. For my project, to split each image, I want to make the vertical lines white (this is what
-   I want information on), and the rest of the image, with the number values, black
-2. This is just temporarily, because to find the split points, I'm only interested in where
+1. For my project, to split each image, I want to make the vertical lines white 
+(this is what
+   I want information on), and the rest of the image, with the number values, 
+black
+2. This is just temporarily, because to find the split points, I'm only 
+interested in where
    the black lines are
-3. I will have to create a kernel that's a thin vertical line, because that's the element I
+3. I will have to create a kernel that's a thin vertical line, because that's 
+the element I
    want to isolate for this step
 4. Use getStructuringElement, because I want a line, this will be a rectangle
 5. Note on syntax: this will be getStructuringElement(element, (width, height))
-6. Erode the table image (it'll just be a white screen with black lines, these black lines
+6. Erode the table image (it'll just be a white screen with black lines, these 
+black lines
    are the table lines)
 7. Get the location of the black lines
 
@@ -177,10 +204,13 @@ def getVerticalLinesPositions(filePath):
 Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html  
 1. Use cv2.findContours(image, mode, method) to find the contours  
 2. image: The binary input image  
-3. mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours only),  
+3. mode: Contour retrieval mode, e.g., cv2.RETR_EXTERNAL (external contours 
+only),  
    cv2.RETR_LIST (all contours), cv2.RETR_TREE (hierarchical contours).  
-4. method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress horizontal,
-   vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE (store all
+4. method: Contour approximation method, e.g., cv2.CHAIN_APPROX_SIMPLE (compress
+ horizontal,
+   vertical, and diagonal segments into their end points), cv2.CHAIN_APPROX_NONE
+ (store all
    contour points)
 
 # Sunday, April 20th
@@ -189,7 +219,8 @@ Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
 1. Need to preprocess image  
 
 ## Office Hours  
-1. Process the image, clean the text you get / make sure all the anomalies are gone  
+1. Process the image, clean the text you get / make sure all the anomalies are 
+gone  
 2. Turn each line into a row in a CSV file (each table page is its own CSV)  
 3. Can call CSV whenever I need patient information  
 4. Create separate folders for each stage of processing  
@@ -198,35 +229,45 @@ Resource: https://docs.opencv.org/4.x/d4/d73/tutorial_py_contours_begin.html
 # Monday, April 21st
 
 ## Data Extraction for Tables  
-- What do I currently have right now? A way to extract text, but I want to create an
+- What do I currently have right now? A way to extract text, but I want to 
+create an
   algorithm to actually clean and process this so much better
-- Either I can work directly on cleaning the text I already get, and go from there, or I can
+- Either I can work directly on cleaning the text I already get, and go from 
+there, or I can
   go back and do some more image processing and then extract the text
-- What do I know about each table as of now? What should the final table/CSV look like?
+- What do I know about each table as of now? What should the final table/CSV 
+look like?
 
 ### Verbal Table Information  
 Columns: Raw Score, Stand. Score, 90% Conf. Int., % ile Rank  
 Table 1:  
-- First column of values is always for the raw score, goes from 108 to 52 (this does NOT
+- First column of values is always for the raw score, goes from 108 to 52 (this 
+does NOT
   change for any table)
-- Second column of values is the standard score, starts at 160, but these values change
+- Second column of values is the standard score, starts at 160, but these values
+ change
   depending on the table, but are always decreasing
-- Third column is the 90% confidence interval, this also changes depending on age, but is
+- Third column is the 90% confidence interval, this also changes depending on 
+age, but is
   always a range less than 100
 - Fourth column is percentile rank, this also change depending on age
 
 Table 2:  
-- First column of values is always for the raw score, goes from 51 to 0 (this does NOT
+- First column of values is always for the raw score, goes from 51 to 0 (this 
+does NOT
   change for any table)
 - The only non-numerical values that should be recognized are -, > and .
 
 ### Nonverbal Table Information  
-- First column of values is always for the raw score, goes from 46 to 0 (this does NOT
+- First column of values is always for the raw score, goes from 46 to 0 (this 
+does NOT
   change for any table)
 
 ### CSV Table Files  
-1. For verbal table, this should contain a heading row, then columns numbered from 108 to 0  
-2. For nonverbal table, this should also contain a heading row, then columns numbered from 46 
+1. For verbal table, this should contain a heading row, then columns numbered 
+from 108 to 0  
+2. For nonverbal table, this should also contain a heading row, then columns 
+numbered from 46 
 to 0
 
 ### Common Errors for Validity Checks
@@ -234,16 +275,20 @@ to 0
 - Created checkDecimalPoints(line)
 54 152. 141-157 >99.9
 
-2. The percentile should be between 99.9 and 0.1, and the > should not be recognized as a
+2. The percentile should be between 99.9 and 0.1, and the > should not be 
+recognized as a
 number value
 57 154 143-159 399.9
 
-3. The value of the raw score must be between the expected values, based on the rawScores
+3. The value of the raw score must be between the expected values, based on the 
+rawScores
 dictionary
 
 ## Progress
-Produced three text extraction files from algorithm (Term Project > test_csv_files)
-1. page_78_verbal1_1: Table 1, didn't add - character to expected characters, so range
+Produced three text extraction files from algorithm (Term Project > 
+test_csv_files)
+1. page_78_verbal1_1: Table 1, didn't add - character to expected characters, so
+ range
 values weren't correct
 2. page_78_verbal1_2: Table 1, after adding - character
 3. page_80_verbal1_1: Table 1, for another page
@@ -254,7 +299,8 @@ values weren't correct
 4. If there are three values, they often start from the standard score
 160 148-165 399.9
 
-5. If there are three hyphens, check that the first number in the range is smaller than the
+5. If there are three hyphens, check that the first number in the range is 
+smaller than the
 second number, if not, seperate them
 85 160-148-165. >99.9
 
@@ -262,12 +308,12 @@ second number, if not, seperate them
 - Populate the expected dictionary first, then search by keys and update
 
 ## Looping through Files
-1. Eventually want to organize everything by age (therefore group things by page, instead of
-table type)
-2. Create a folder within the test_csv_files for each page, then populate it with the CSVs
-for each table type
-3. In a new function, join the verbal1.csv and verbal2.csv for each page into a new CSV,
-then store this
+1. Eventually want to organize everything by age (therefore group things by 
+page, instead of table type)
+2. Create a folder within the test_csv_files for each page, then populate it 
+with the CSVs for each table type
+3. In a new function, join the verbal1.csv and verbal2.csv for each page into a 
+new CSV, then store this
 
 ## Progress
 - Significant work on text extraction methods
@@ -279,7 +325,8 @@ then store this
 - 
 
 ## Future Improvements
-- Algorithm to take participant age and calculate years and months based off of that, instead of asking explicitly for their age in years and months
+- Algorithm to take participant age and calculate years and months based off of 
+that, instead of asking explicitly for their age in years and months
 
 # Wednesday, April 23rd
 1. Right now, I'm able to get an uploaded file from the user with the columns
@@ -295,13 +342,89 @@ then store this
 
 ## Meeting Notes
 1. Keep existing idea to have an input file, then create existing output file
-2. Add a tab in the Excel sheet that's formatted exactly like the BehavioralBattery.xlsx
-3. Compare the manually entered values from BehavioralBattery.xlsx file to generated 
-values from KBIT-2 Rapid Score, the goal is to check for any discrepancies and see why 
-they are happening
-4. Currently, patient age is calculated as a decimal (ex. 28.36) or by age in months
-5. Date of birth is usually represented by DOB, and the date stored is the test date
+2. Add a tab in the Excel sheet that's formatted exactly like the 
+BehavioralBattery.xlsx
+3. Compare the manually entered values from BehavioralBattery.xlsx file to 
+generated values from KBIT-2 Rapid Score, the goal is to check for any 
+discrepancies and see why they are happening
+4. Currently, patient age is calculated as a decimal (ex. 28.36) or by age in 
+months
+5. Date of birth is usually represented by DOB, and the date stored is the test 
+date
 
 ## Patient Age Algorithm
-- Find total months, based on test date, and then integer divide to get the age, and
-use modulus to get the months
+- Find total months, based on test date, and then integer divide to get the age,
+ 
+and use modulus to get the months
+
+# Friday, May 23rd
+
+## Splitting Images
+Noted the images to troubleshoot image cropping for below:
+1. nonverbal_page_85
+2. nonverbal_page_91
+3. verbal1_page_85
+4. verbal1_page_91
+5. verbal2_page_85
+6. verbal2_page_91
+
+Pages: 85, 91
+
+## Data Extraction Pipeline
+1. extractAllText(filePath)
+   # Uses Tesseract OCR to extract text from an image at `filePath`.
+
+    │
+    ▼
+
+2. cleanTextToList(text, tableType)
+   # Parses raw OCR text into a structured list of dictionaries, 
+   # 1. Creates an empty final list of dictionaries (represents empty data frame)
+   # 2. Identifies relevant lines
+   # 3. Individually cleans and splits each line
+   # 4. Inserts missing raw score values
+   # 5. Updates final list of dictionaries with values from page
+
+    ├── createEmptyDataList(tableType)
+    │   # Creates a list of dictionaries with raw scores and empty fields
+    │   └── rawScoreValues(tableType)
+    │       # Returns start and end raw scores for the given table type
+
+    ├── getNumericalValues(text, tableType)
+    │   # Determines which lines in the text contain the data table
+    │   └── rawScoreValues(tableType)
+
+    ├── cleanLine(line)
+    │   # Cleans unwanted characters (e.g., |, _, —) and trims text
+    │   └── getOnlyDigits(line)
+    │       # Returns only the part of a line between first and last digit
+
+    ├── reformatParts(line)
+    │   # Splits line into parts, removes non-numeric characters
+    │   └── checkDecimalPoints(part)
+    │       # Strips leading/trailing decimal points
+
+    ├── fillInMissingValues(parts, lastUpdated)
+    │   # If raw score is missing, inserts a placeholder
+    │   └── placeholderRawScore(parts, lastUpdated)
+    │       # Assumes the missing raw score is one less than last seen
+
+    └── updateDictionary(line, parts, dataList)
+        # Fills in the appropriate dictionary entry for the raw score
+        ├── checkConfidenceInterval(part)
+        │   # Parses 3-part confidence interval and returns as tuple
+        └── checkPercentile(part)
+            # Converts 5-digit percentiles to '>99.9'
+
+    ▼
+
+3. listToDataFrame(dataList, tableType)
+   # Converts the list of dicts into a DataFrame, aligning it with a base one
+    └── createDataFrame(tableType)
+        # Creates a blank DataFrame indexed by raw score
+        └── rawScoreValues(tableType)
+
+    ▼
+
+4. dataFrameToCSV(df, tableType, pageNum, outputFolder)
+   # Saves the DataFrame as a CSV in the specified output folder

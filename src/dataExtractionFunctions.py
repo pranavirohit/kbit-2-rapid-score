@@ -4,6 +4,8 @@ No changes to the actual code structure were made.
 '''
 from commonImports import *
 
+# Input: File path for the image with the CSV images
+# Output: String with values extracted before cleaning
 def extractAllText(filePath):
     image = PILImage.open(filePath)
     text = pyt.image_to_string(image, config='--psm 6')
