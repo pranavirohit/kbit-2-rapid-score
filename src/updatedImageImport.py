@@ -85,13 +85,13 @@ def identifyMissingCSVs(folderPath):
 
     for fileName in os.listdir(folderPath):
         
+        # Identifies correct table type by reading file name
         possibleTableTypes = {'nonverbal', 'verbal1', 'verbal2'}
         for type in possibleTableTypes:
             if type in fileName: 
                 tableType = type
 
-        pageNum = findFilePageNum(fileName) # Get last two characters because these
-        # are the page numbers 
+        pageNum = findFilePageNum(fileName) 
         processedCSVs.add(pageNum)
     
     startPage, endPage = 78, 128
