@@ -28,14 +28,12 @@ def cleanTextToList(text, tableType):
         line = cleanLine(line)
         parts = reformatParts(line)
         parts = fillInMissingValues(parts, lastUpdatedRawScore)
-        print(parts)
 
         # Changed to update pre-made dictionary, based on fixed raw scores
         lastUpdated = updateDictionary(line, parts, cleanedData)
         if lastUpdated is not None:
             lastUpdatedRawScore = lastUpdated
 
-    print(cleanedData)
     return cleanedData
 
 def fillInMissingValues(parts, lastUpdated):

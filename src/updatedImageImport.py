@@ -70,6 +70,24 @@ def saveNonverbalCSVs():
         else:
             print(f'File not found: {filePath}')
 
+def saveTableCSVs(folderPath, tableType):
+    b1ThresholdedImgFolder = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\KBIT-2 Rapid Score\test_1\thresholded_split_images"
+    )
+    os.makedirs(folderPath, exist_ok=True)
+    startPage, endPage = 78, 127
+    for pageNum in range(startPage, endPage + 1):
+        fileName = f'{tableType}_page_{pageNum}.png'
+        filePath = os.path.join(b1ThresholdedImgFolder, fileName)
+
+        if os.path.exists(filePath):
+            try:
+                saveCSV(filePath, tableType, pageNum, folderPath)
+            except Exception as exceptionStatement:
+                print(f'Error on page {pageNum}: {exceptionStatement}')
+        else:
+            print(f'File not found: {filePath}')
 
 # Input: File path to thresholded image, type of table, 
 def saveCSV(filePath, tableType, pageNum, outputFolder):
@@ -86,6 +104,11 @@ def main():
 
     # createAllFolders(78, 127, b1PrelimCSVs)
     saveNonverbalCSVs()
+    b1Verbal1CSVsFolder = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\KBIT-2 Rapid Score\test_1\all_verbal1_CSVs"
+    )
+    saveTableCSVs(b1Verbal1CSVsFolder, 'verbal1')
 
 
 main()
