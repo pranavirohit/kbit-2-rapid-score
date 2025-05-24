@@ -24,7 +24,7 @@ def saveAllTable1Pages(b1Pdf, b1ImageFolder, b1SplitImageFolder):
 # Copied from imageImport.py
 def createAllFolders(startPage, endPage, outputFolder):
     for pageNum in range(startPage, endPage + 1):
-        subfolderName = f'page_{pageNum}_all_CSV'
+        subfolderName = f'page_{pageNum}'
         subfolderPath = os.path.join(outputFolder, subfolderName)
         os.makedirs(subfolderPath, exist_ok=True)
 
@@ -39,14 +39,14 @@ def main():
 
     # File path to folder where PNGs of Table B.1 PDF pages will be saved
     b1ImageFolder = (
-        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 "
-        r"Rapid Score\Table 1\Images"
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\kbit-2_rapid_score\table_1\page_images"
     )
 
     # File path to folder where cropped Table B.1 images will be saved
     b1SplitImageFolder = (
-        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 "
-        r"Rapid Score\Table 1\CSVs"
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\kbit-2_rapid_score\table_1\thresholded_split_images"
     )
 
     saveAllTable1Pages(b1Pdf, b1ImageFolder, b1SplitImageFolder)
