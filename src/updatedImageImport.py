@@ -34,7 +34,7 @@ def main():
     # File path to PDF containing all Table B.1 images
     b1Pdf = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 "
-        r"Rapid Score\Book Pages\kbit_table_1_pages_78_127.pdf"
+        r"Rapid Score\kbit_table_1_pages_78_127.pdf"
     )
 
     # File path to folder where PNGs of Table B.1 PDF pages will be saved
