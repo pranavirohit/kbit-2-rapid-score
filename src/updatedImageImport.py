@@ -46,6 +46,8 @@ def testCSVPage(type):
     df = listToDataFrame(cleanedList, type)
     dataFrameToCSV(df, type, output)
 
+# Correct save Nonverbal CSVs function (going to delete and include as part of
+# saveTableCSVs function)
 def saveNonverbalCSVs():
     b1NonverbalCSVsFolder = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
