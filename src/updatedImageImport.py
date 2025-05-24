@@ -73,15 +73,11 @@ def saveCSV(filePath, tableType, pageNum, outputFolder):
     dataFrameToCSV(df, tableType, pageNum, outputFolder)
 
 def findFilePageNum(fileName):
-    result = ''
-    fileParts = [item for item in s.split('_')]
-
-    length = len(fileName)
-    for char in range(length):
-        if char.isdigit():
-            if 
-            result += char 
-    return int(result)
+    fileParts = fileName.split('_')
+    for item in fileParts:
+        if item.endswith('.csv'):
+            item = item.replace('.csv', '')
+            return int(item)
 
 def identifyMissingCSVs(folderPath):
     tableType = None
