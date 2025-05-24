@@ -28,12 +28,64 @@ def createAllFolders(startPage, endPage, outputFolder):
         subfolderPath = os.path.join(outputFolder, subfolderName)
         os.makedirs(subfolderPath, exist_ok=True)
 
+def testCSVPage(type):
+    # Need a way to loop through this
+    test = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project"
+        r"\table_data_files\verbal2_page_80.png"
+    )
+    output = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\15-112\Term Project"
+        r"\test_csv_files"
+    )
+
+    text = extractAllText(test)
+    print(f'extractAll: {text}')
+    cleanedList = cleanTextToList(text, type)
+
+    df = listToDataFrame(cleanedList, type)
+    dataFrameToCSV(df, type, output)
+
+def saveNonverbalCSVs():
+    b1NonverbalCSVsFolder = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\KBIT-2 Rapid Score\test_1\all_nonverbal_CSVs"
+    )
+    b1ThresholdedImgFolder = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\KBIT-2 Rapid Score\test_1\thresholded_split_images"
+    )
+    
+    os.makedirs(b1NonverbalCSVsFolder, exist_ok=True)
+    startPage, endPage = 78, 127
+    for pageNum in range(startPage, endPage + 1):
+        fileName = f'nonverbal_page_{pageNum}.png'
+        filePath = os.path.join(b1ThresholdedImgFolder, fileName)
+
+        if os.path.exists(filePath):
+            try:
+                saveCSV(filePath, 'nonverbal', pageNum, b1NonverbalCSVsFolder)
+            except Exception as exceptionStatement:
+                print(f'Error on page {pageNum}: {exceptionStatement}')
+        else:
+            print(f'File not found: {filePath}')
+
+
+# Input: File path to thresholded image, type of table, 
+def saveCSV(filePath, tableType, pageNum, outputFolder):
+    text = extractAllText(filePath)
+    cleanedList = cleanTextToList(text, tableType)
+    df = listToDataFrame(cleanedList, tableType)
+    dataFrameToCSV(df, tableType, pageNum, outputFolder)
+
 def main():
     b1PrelimCSVs = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
         r"\KBIT-2 Rapid Score\test_1\output_CSVs"
     )
 
-    createAllFolders(78, 127, b1PrelimCSVs)
+    # createAllFolders(78, 127, b1PrelimCSVs)
+    saveNonverbalCSVs()
+
 
 main()

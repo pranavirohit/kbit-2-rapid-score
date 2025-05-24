@@ -11,6 +11,10 @@ def extractAllText(filePath):
     text = pyt.image_to_string(image, config='--psm 6')
     return text
 
+# Input: String with values extracted before cleaning
+# Output: List of dictionaries, turns each line into a dictionary in the format 
+# {'Raw': , 'Standard': , 'ConfidenceInterval': , 'Percentile': }
+
 def cleanTextToList(text, tableType):
     cleanedData = createEmptyDataList(tableType)
     lastUpdatedRawScore = None
@@ -165,15 +169,21 @@ def createDataFrame(tableType):
     df.set_index('Raw', inplace=True)
     return df
 
+# Input: List of dictionaries, where each dictionary represents the values on
+# each line, {'Raw': , 'Standard': , 'ConfidenceInterval': , 'Percentile' 
+# Output: Data frame with columns 'Raw', 'Standard', 'ConfidenceInterval', 
+# 'Percentile'
 def listToDataFrame(dataList, tableType):
     df = createDataFrame(tableType)
     cleanedData = pd.DataFrame(dataList)
     cleanedData.set_index('Raw', inplace=True)
     return df.join(cleanedData)
 
+# Input: Data frame
 def dataFrameToCSV(df, tableType, pageNum, outputFolder):
-    fileName = f'{pageNum}_{tableType}.csv'
+    fileName = f'{tableType}_page_{pageNum}.csv'
     filePath = os.path.join(outputFolder, fileName)
     os.makedirs(outputFolder, exist_ok=True)
-    df.to_csv(filePath)
+    # Added index=False to avoid duplicating raw score column
+    df.to_csv(filePath, index=False)
     print(f'Saved {fileName} to {filePath}')
