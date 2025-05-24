@@ -72,6 +72,35 @@ def saveCSV(filePath, tableType, pageNum, outputFolder):
     df = listToDataFrame(cleanedList, tableType)
     dataFrameToCSV(df, tableType, pageNum, outputFolder)
 
+def findFilePageNum(fileName):
+    result = ''
+    for char in fileName:
+        if char.isdigit():
+            result += char 
+    return int(result)
+
+def identifyMissingCSVs(folderPath):
+    tableType = None
+    processedCSVs, missingCSVs = set(), []
+
+    for fileName in os.listdir(folderPath):
+        
+        possibleTableTypes = {'nonverbal', 'verbal1', 'verbal2'}
+        for type in possibleTableTypes:
+            if type in fileName: 
+                tableType = type
+
+        pageNum = int(fileName[-2:]) # Get last two characters because these
+        # are the page numbers 
+        processedCSVs.add(pageNum)
+
+    startPage, endPage = 78, 128
+    for pageNum in range(startPage, endPage + 1):
+        if pageNum not in processedCSVs:
+            missingCSVs.append(pageNum)
+    
+    print(f'The missing {tableType} CSVs are: {missingCSVs}')
+
 def main():
     b1PrelimCSVs = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
@@ -98,6 +127,9 @@ def main():
     )
 
     # saveTableCSVs(b1Verbal2CSVsFolder, 'verbal2')
+    
+    identifyMissingCSVs(b1Verbal2CSVsFolder)
+
 
 
 main()
