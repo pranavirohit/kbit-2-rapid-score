@@ -74,8 +74,12 @@ def saveCSV(filePath, tableType, pageNum, outputFolder):
 
 def findFilePageNum(fileName):
     result = ''
-    for char in fileName:
+    fileParts = [item for item in s.split('_')]
+
+    length = len(fileName)
+    for char in range(length):
         if char.isdigit():
+            if 
             result += char 
     return int(result)
 
@@ -90,10 +94,10 @@ def identifyMissingCSVs(folderPath):
             if type in fileName: 
                 tableType = type
 
-        pageNum = int(fileName[-2:]) # Get last two characters because these
+        pageNum = findFilePageNum(fileName) # Get last two characters because these
         # are the page numbers 
         processedCSVs.add(pageNum)
-
+    
     startPage, endPage = 78, 128
     for pageNum in range(startPage, endPage + 1):
         if pageNum not in processedCSVs:
