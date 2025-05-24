@@ -101,14 +101,22 @@ def main():
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
         r"\KBIT-2 Rapid Score\test_1\output_CSVs"
     )
-
     # createAllFolders(78, 127, b1PrelimCSVs)
-    saveNonverbalCSVs()
+    
+    # saveNonverbalCSVs()
+    
     b1Verbal1CSVsFolder = (
         r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
         r"\KBIT-2 Rapid Score\test_1\all_verbal1_CSVs"
     )
     saveTableCSVs(b1Verbal1CSVsFolder, 'verbal1')
+
+    b1Verbal2CSVsFolder = (
+        r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research"
+        r"\KBIT-2 Rapid Score\test_1\all_verbal2_CSVs"
+    )
+
+    saveTableCSVs(b1Verbal2CSVsFolder, 'verbal2')
 
 
 main()
