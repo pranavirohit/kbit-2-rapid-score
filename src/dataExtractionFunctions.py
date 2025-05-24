@@ -184,6 +184,5 @@ def dataFrameToCSV(df, tableType, pageNum, outputFolder):
     fileName = f'{tableType}_page_{pageNum}.csv'
     filePath = os.path.join(outputFolder, fileName)
     os.makedirs(outputFolder, exist_ok=True)
-    # Added index=False to avoid duplicating raw score column
-    df.to_csv(filePath, index=False)
+    df.to_csv(filePath)
     print(f'Saved {fileName} to {filePath}')
