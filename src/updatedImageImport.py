@@ -130,6 +130,4 @@ def main():
     
     identifyMissingCSVs(b1Verbal2CSVsFolder)
 
-
-
 main()
