@@ -494,13 +494,29 @@ iq_composite_page_#: SumofStandardScores, StandScore, 90ConfInt, PercentileRank
 #### Table B.3
 percentile_ranges: ScaledScore, StandScore, PercentileRank
 
-### Table B.5
-age_equivalents: Age, Verbal, Nonverbal
-- Will need to split Age into ageYears and ageMonths variables, Verbal into
-verbalLower and verbalUpper, as well as Nonverbal to nonverbalLower, 
-nonverbalUpper
+#### Table B.4
+Converted to manual function
 
-### Table B.7
+#### Table B.5
+1. age_equivalents_preprocessing: Age, Verbal, Nonverbal
+- Create new CSV that splits years:age notation into two seperate columns
+- Populate all Nonverbal rows
+
+2. age_equivalents: AgeYears, AgeMonths, Verbal, Nonverbal
+- Start by parsing Verbal column, if Verbal column contains one value (character
+length is 1), equal to both verbalLowerBound and verbalUpperBound
+- Compare until verbalLowerBound <= verbalRawScore <= verbalUpperBound is True
+- Return AgeYears and AgeMonths row values for this row, this is the age
+equivalent data for the verbal score
+- Then parse Nonverbal column in a similar fashion, consider creating a helper
+function for this
+- Return AgeYears and AgeMonths row values for this row, this is the age
+equivalent data for the nonverbal score
+
+#### Table B.6
+Converted to manual function
+
+#### Table B.7
 score_differences: Age, >=16, <16%, <10%, <5%, <2%, <1%
 - Find correct row by parsing Age column information
 - If Age column contains one value (character length is 1), equal to 
@@ -510,14 +526,11 @@ differenceUpperBound changing based on each column, comparison until boolean
 condition becomes True
 - Return column name
 
-3. percentile_ranges: Standard Score, 
-4. age_equivalents: Verbal Score (Lower), Verbal Score (Upper), Nonverbal Score
-(Lower), Nonverbal Score (Upper)
-5. score_differences: Age, >=16, <16%, <10%, <5%, <2%, <1%
-6. 
-
 # Thursday, June 5th
 
 ## To-Do
 1. Consider renaming columns of Table B.1 CSVs to match book table headings 
 exactly
+2. Standardize returning of error and exception functions
+3. Decide variable naming, choose between upper and upperBound, or lower and
+lowerBound
