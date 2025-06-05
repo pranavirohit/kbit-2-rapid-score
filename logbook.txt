@@ -354,7 +354,6 @@ date
 
 ## Patient Age Algorithm
 - Find total months, based on test date, and then integer divide to get the age,
- 
 and use modulus to get the months
 
 # Friday, May 23rd
@@ -373,7 +372,6 @@ Pages: 85, 91
 ## Data Extraction Pipeline
 1. extractAllText(filePath)
    # Uses Tesseract OCR to extract text from an image at `filePath`.
-
     │
     ▼
 
@@ -415,7 +413,6 @@ Pages: 85, 91
         │   # Parses 3-part confidence interval and returns as tuple
         └── checkPercentile(part)
             # Converts 5-digit percentiles to '>99.9'
-
     ▼
 
 3. listToDataFrame(dataList, tableType)
@@ -423,8 +420,64 @@ Pages: 85, 91
     └── createDataFrame(tableType)
         # Creates a blank DataFrame indexed by raw score
         └── rawScoreValues(tableType)
-
     ▼
 
 4. dataFrameToCSV(df, tableType, pageNum, outputFolder)
    # Saves the DataFrame as a CSV in the specified output folder
+
+# Saturday, May 24th
+
+## File Directory Structure
+What's the end goal? I'll need to access the verbal and nonverbal tables based
+on age, so I want organize the final CSVs by age/page folders. But there's an 
+intermediate step where I have the split images, and I want to join the verbal 2
+pages together.
+
+## To-Do
+1. Convert all nonverbal thresholded images into CSV files, save to output CSV
+locations (process all nonverbal images)
+
+## Nonverbal CSVs
+- Downloaded all preliminary ones until page 83, moving onto verbal1
+- Will follow same format for Verbal2
+- Use pandas dataframe/library to join verbal1 files and verbal2 CSVs together
+
+## Current Issues
+- Not all CSV files are being saved (ex. if it can't read the thresholded image
+correctly, it skips the creation of the file)
+- Issue in dataExtractionFunctions.py, because all thresholded images are
+present
+- Plan to write helper function to return which files weren't created
+
+# Sunday, May 25th
+
+## To-Do
+1. Update dataExtractionFunctions.py to create CSVs for all tables, troubleshoot
+CSV generation for missing files
+
+Verbal (Part 2):
+2. 
+
+# Wednesday, June 6th
+
+## To-Do
+1. Generate preliminary CSVs for Tables 2-9
+2. Revisit notes on scoring algorithm
+
+## Patient Age Algorithm
+1. Find total months, based on test date, and then integer divide to get the 
+age, and use modulus to get the months
+2. For ages 4 to 15, your calculation should ignore the days associate with the 
+patient's age (ex. 11 years 5 months 27 days should simply be 11 years 5 months)
+3. For ages 16 and above, your calculation should disregard the days and months
+associated with the patient's age
+
+## Scoring Algorithm
+- Decided to name Table B2 file iq_composite_page_1, iq_composite_page_2
+- If the patient's Nonverbal or Verbal raw score (B1, B2) are 0, no results
+can be interpreted, and the line should populate with N/A
+
+# Table Files
+1. 
+2. 
+3. percentile_ranges: Standard Score, 

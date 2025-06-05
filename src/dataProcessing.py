@@ -20,3 +20,18 @@ Here's what each function does:
 
 def processUploadedFile(app, filePath):
     return 42
+
+def descriptiveCategory(standScore):
+    if standScore <= 69:
+        return 'Lower extreme'
+    elif 70 <= standScore <= 84:
+        return 'Below average'
+    elif 85 <= standScore <= 115:
+        return 'Average'
+    elif 116 <= standScore <= 130:
+        return 'Above average'
+    elif standScore >= 131:
+        return 'Upper extreme'
+    # Add exception here
+    else:
+        return 'Error'
