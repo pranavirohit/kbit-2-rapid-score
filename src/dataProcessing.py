@@ -36,3 +36,37 @@ def descriptiveCategory(standScore):
     # Add exception here
     else:
         return 'Error'
+
+# Table B.6
+def significanceLevel(ageYears, verbalScore, nonverbalScore):
+    difference = verbalScore - nonverbalScore
+    significanceValues = {
+        (4, 4): (17, 21),
+        (5, 10): (15, 18),
+        (11, 55): (13, 16),
+        (56, 90): (12, 14)
+    }
+    for ageBounds in significanceValues:
+        minAge = ageBounds[0]
+        maxAge = ageBounds[1]
+        if minAge <= ageYears <= maxAge:
+            bounds = significanceValues[ageBounds]
+            lowerBound = bounds[0]
+            upperBound = bounds[1]
+            
+    if 0 <= difference < lowerBound:
+        return 'Not Significant'
+    elif lowerBound <= difference <= upperBound:
+        return '<0.05'
+    elif difference > upperBound:
+        return '<0.01'
+    else:
+        return 'Error'
+
+# Add test decorator, learn what test decorators do
+'''
+@test
+def test(func):
+    
+def testSignificanceLevel():
+'''

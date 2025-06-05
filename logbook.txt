@@ -473,11 +473,37 @@ patient's age (ex. 11 years 5 months 27 days should simply be 11 years 5 months)
 associated with the patient's age
 
 ## Scoring Algorithm
-- Decided to name Table B2 file iq_composite_page_1, iq_composite_page_2
+- Decided to name Table B.2 file iq_composite_page_1, iq_composite_page_2
 - If the patient's Nonverbal or Verbal raw score (B1, B2) are 0, no results
 can be interpreted, and the line should populate with N/A
+- IQ Composite doesn't have an age equivalent score
+- Split ranges in Table B.5 into individual columns, go down column rows to test
+lower and upper bounds
+- Create graphical profile based on confidence intervals for three test 
+categories
 
-# Table Files
-1. 
-2. 
+### Table Files
+
+#### Table B.1
+1. nonverbal_page_#: RawScore, StandScore, 90ConfInt, PercentileRank
+2. verbal_page_#:
+
+#### Table B.2
+iq_composite_page_#: SumofStandardScores, StandScore, 90ConfInt, PercentileRank
+
+#### Table B.3
+percentile_ranges: ScaledScore, StandScore, PercentileRank
+
+### Table B.4
+
 3. percentile_ranges: Standard Score, 
+4. age_equivalents: Verbal Score (Lower), Verbal Score (Upper), Nonverbal Score
+(Lower), Nonverbal Score (Upper)
+5. score_differences: Age, >=16, <16%, <10%, <5%, <2%, <1%
+6. 
+
+# Thursday, June 5th
+
+## To-Do
+1. Consider renaming columns of Table B.1 CSVs to match book table headings 
+exactly
