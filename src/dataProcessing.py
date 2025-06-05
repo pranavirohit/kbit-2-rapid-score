@@ -21,6 +21,7 @@ Here's what each function does:
 def processUploadedFile(app, filePath):
     return 42
 
+# Table B.4
 def descriptiveCategory(standScore):
     if standScore <= 69:
         return 'Lower extreme'
