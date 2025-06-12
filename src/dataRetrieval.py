@@ -25,11 +25,18 @@ def readTableB1CSV(filePath, rawScore):
         return 'Error', 'Error', 'Error'
 
 def separateInterval(rangeVals):
-    if '-' in rangeVals:
-        bounds = [val.strip() for val in rangeVals.split('-')]
-        return (int(bounds[0]), int(bounds[1]))
-    elif '–' in rangeVals:
-        return ('Did not substitute - correctly', None)
+    try:
+        if '-' in rangeVals:
+            bounds = [val.strip() for val in rangeVals.split('-')]
+            return (int(bounds[0]), int(bounds[1]))
+        elif '–' in rangeVals:
+            return ValueError('Did not substitute - correctly')
+        else:
+            return ValueError('No dash found')
+        
+    except Exception as e:
+        print(f'[!] separateInterval error: {e}')
+        return(None, None)
 
 # Table B.4
 def descriptiveCategory(standScore):
