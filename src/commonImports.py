@@ -64,6 +64,7 @@ from dataRetrieval import (
     readTableB1CSV,
     separateInterval,
     readTableB2CSV,
+    findRowByScoreRange,
     descriptiveCategory,
     significanceLevel,
 )

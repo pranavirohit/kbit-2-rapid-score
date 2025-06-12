@@ -46,19 +46,25 @@ def readTableB2CSV(standScoreSum):
     # Change to config.py setup later or relative file paths
     filePath = r"C:\Users\pkroh\OneDrive\Documents\GitHub\kbit-2-rapid-score\data\tables\iq_composite_page_1.csv"
     df = pd.read_csv(filePath)
-    row = df[df['SumofStandardScores'] == standScoreSum]
+    rowAsDict = findRowByScoreRange(df, standScoreSum, 'SumofStandardScores')
     
-    if not row.empty:
-        rowAsDict = row.iloc[0].to_dict()
-        # Changed parameters, since CSV file headings changed from Table B.1 to
-        # Table B.2
-        standScore = rowAsDict['StandScore']
-        confInt = separateInterval(rowAsDict['90ConfInt'])
-        percentile = rowAsDict['PercentileRank']
-        return standScore, confInt, percentile
-    
-    else:
-        return 'Error', 'Error', 'Error'
+    # Changed parameters, since CSV file headings changed from Table B.1 to
+    # Table B.2
+    standScore = rowAsDict['StandScore']
+    confInt = separateInterval(rowAsDict['90ConfInt'])
+    percentile = rowAsDict['PercentileRank']
+    return standScore, confInt, percentile
+
+def findRowByScoreRange(df, score, rangeColumn):
+    for i, row in df.iterrows():
+        possibleRange = row[rangeColumn]
+        if '-' in possibleRange:
+            lowerBound, upperBound = separateInterval(possibleRange)
+            if lowerBound <= score <= upperBound:
+                return row.to_dict()
+        else:
+            if score == int(possibleRange):
+                return row.to_dict()
 
 # Table B.4
 def descriptiveCategory(standScore):
