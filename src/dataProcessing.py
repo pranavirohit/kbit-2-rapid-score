@@ -33,6 +33,77 @@ def createFileDict(filePath):
     data = df.to_dict(orient="records")
     return data
 
+def buildParticipantResults(row):
+    # Expecting a dictionary with the parameters of the input file, reads in
+    # five values directly
+    id = row['Participant ID']
+
+    # In the future, retrieve age information through algorithm that calculates
+    # both from test date and birth date of participant
+    ageYears = row['Age (Years)']
+    ageMonths = row['Age (Months)']
+
+    verbalKnowledgeRaw = row['Verbal Knowledge']
+    riddlesRaw = row['Riddles']
+    matricesRaw = row['Matrices']
+
+    participant = {
+        'Participant ID': id,
+        'Age (Years)': ageYears,
+        'Age (Months)': ageMonths,
+
+        # Raw Scores
+        'Verbal Knowledge': verbalKnowledgeRaw, # A1
+        'Riddles': riddlesRaw, # A2
+        'Matrices': matricesRaw, # A3
+
+        # Total Raw Scores
+        'Raw Verbal Total': verbalKnowledgeRaw + riddlesRaw, # B1 = A1 + A2
+        
+        'Standard Score': None,
+        '90% Confidence Interval': None,
+        'Percentile Rank': None,
+        'Descriptive Category': None,
+        'Age Equivalent': None,
+
+        # Nonverbal Results
+
+
+
+
+    }
+
+    '''
+    Formatting for output file, check back on this because there will be
+    repeat values
+
+    participant = {
+        'Participant ID': id,
+        'Age (Years)': ageYears,
+        'Age (Months)': ageMonths,
+
+        # Scoring Information
+        'Verbal Knowledge': verbalKnowledgeRaw,
+        'Riddles': riddlesRaw,
+        'Matrices': matricesRaw,
+
+        # Verbal Results
+        'Total Raw Scores': verbalKnowledgeRaw + riddlesRaw,
+        'Standard Score': None,
+        '90% Confidence Interval': None,
+        'Percentile Rank': None,
+        'Descriptive Category': None,
+        'Age Equivalent': None,
+
+        # Nonverbal Results
+
+
+
+
+    }
+    '''
+
+
 # Table B.4
 def descriptiveCategory(standScore):
     if standScore <= 69:
