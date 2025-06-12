@@ -10,11 +10,6 @@ def findTableB1CSV(ageYears, ageMonths):
     # Logic to return filePath
     return 42
 
-# Some seperation between retrieving verbal/nonverbal values?
-def tableB1Nonverbal(filePath, nonverbalRaw):
-    b1Nonverbal = df = pd.read_csv(filePath)
-    row = df[df['Raw'] == ]
-
 def readTableB1CSV(filePath, rawScore):
     df = pd.read_csv(filePath)
     row = df[df['Raw'] == rawScore]
@@ -30,11 +25,8 @@ def readTableB1CSV(filePath, rawScore):
         return 'Error', 'Error', 'Error'
 
 def seperateInterval(rangeVals):
-    
-
-
-def tableB1Verbal():
-    return 42
+    bounds = [val.strip() for val in rangeVals.split('-')]
+    return (int(bounds[0]), int(bounds[1]))
 
 # Table B.4
 def descriptiveCategory(standScore):
@@ -79,9 +71,7 @@ def significanceLevel(ageYears, verbalScore, nonverbalScore):
         return 'Error'
 
 # Add test decorator, learn what test decorators do
-'''
+
+
 @test
-def test(func):
-    
 def testSignificanceLevel():
-'''

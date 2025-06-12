@@ -67,3 +67,12 @@ from dataRetrieval import (
     descriptiveCategory,
     significanceLevel,
 )
+
+def test(func):
+    def wrapper():
+        try:
+            func()
+            print(f'[✓] {func.__name__} passed!')
+        except AssertionError as e:
+            print(f'[✗] {func.__name__} failed: {e}')
+    return wrapper
