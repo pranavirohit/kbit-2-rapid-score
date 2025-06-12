@@ -57,12 +57,6 @@ from screenHelpers import (
     clickButtons
 )
 
-from dataProcessing import (
-    processUploadedFile, 
-    createFileDict,
-    buildParticipantResults
-)
-
 from dataRetrieval import (
     readTableB1CSV,
     separateInterval,
@@ -78,3 +72,9 @@ def test(func):
         except AssertionError as e:
             print(f'[✗] {func.__name__} failed: {e}')
     return wrapper
+
+from dataProcessing import (
+    processUploadedFile, 
+    createFileDict,
+    buildParticipantResults
+)

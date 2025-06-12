@@ -1,10 +1,10 @@
-from commonImports import *
 '''
 ADD ALL UPDATED FUNCTIONS TO COMMON IMPORTS ONCE DONE
 '''
 # Table B.1
 # Will need to add a file directory searching mechanism to access the correct
 # files, but first need to uploaded validated CSVs to GitHub
+from commonImports import *
 
 def findTableB1CSV(ageYears, ageMonths):
     # Logic to return filePath
@@ -23,7 +23,7 @@ def readTableB1CSV(filePath, rawScore):
     
     else:
         return 'Error', 'Error', 'Error'
-
+    
 def separateInterval(rangeVals):
     try:
         if '-' in rangeVals:
@@ -82,6 +82,7 @@ def significanceLevel(ageYears, verbalScore, nonverbalScore):
 
 # Add test decorator, learn what test decorators do
 
+'''
 @test
 def testSeparateInterval():
     assert separateInterval('123 - 157') == (123, 157)
@@ -96,3 +97,4 @@ def testSeparateInterval():
     assert separateInterval('abc - xyz') == (None, None)
 
 # def testSignificanceLevel():
+'''

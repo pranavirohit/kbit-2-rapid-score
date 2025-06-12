@@ -541,3 +541,39 @@ lowerBound
 scoring pipeline
 4. Choose fixed Table B.1 CSV to use, manually retrieve values from CSV through
 Pandas
+
+## Processing Outputs
+
+### Table B.1
+This worked!
+{
+  'Participant ID': 101,
+  'Age (Years)': 4,
+  'Age (Months)': 1,
+  'Verbal Knowledge': 12,
+  'Riddles': 11,
+  'Matrices': 15,
+  'Raw Verbal Total': 23,
+  'Raw Nonverbal Total': 15,
+  'Standard Verbal': 110,
+  '90% CI Verbal': (101, 118),
+  'PR Verbal': '75',
+  'Standard Nonverbal': 118,
+  '90% CI Nonverbal': (105, 127),
+  'PR Nonverbal': '88',
+  'Standard Sum': None,
+  'Standard IQ': None,
+  '90% CI IQ': (None, None),
+  'PR IQ': None,
+  'PR Verbal Range': (None, None),
+  'PR Nonverbal Range': (None, None),
+  'PR IQ Range': (None, None),
+  'Descriptive Verbal': None,
+  'Descriptive Nonverbal': None,
+  'Descriptive IQ': None,
+  'Age Equivalent Verbal': None,
+  'Age Equivalent Nonverbal': None,
+  'Score Difference': None,
+  'Significance Level': None,
+  'Frequency of Occurence': None
+}

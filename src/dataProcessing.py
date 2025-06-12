@@ -25,13 +25,30 @@ from commonImports import *
 def processUploadedFile(filePath): 
     # Expecting an Excel file in example_data file format
     rowsAsDicts = createFileDict(filePath)
-    buildParticipantResults(rowsAsDicts)
+    for row in rowsAsDicts:
+        participant = buildParticipantResults(row)
+        print(participant)
     return 42
 
 def createFileDict(filePath):
     df = pd.read_excel(filePath, engine="openpyxl", header=1)
     data = df.to_dict(orient="records")
     return data
+
+def readTableB1CSV(filePath, rawScore):
+    df = pd.read_csv(filePath)
+    row = df[df['Raw'] == rawScore]
+    
+    if not row.empty:
+        rowAsDict = row.iloc[0].to_dict()
+        standScore = rowAsDict['Standard']
+        confInt = separateInterval(rowAsDict['ConfidenceInterval'])
+        percentile = rowAsDict['Percentile']
+        return standScore, confInt, percentile
+    
+    else:
+        return 'Error', 'Error', 'Error'
+
 
 def buildParticipantResults(row):
     # Expecting a dictionary with the parameters of the input file, reads in
@@ -102,6 +119,7 @@ def buildParticipantResults(row):
     }
 
     writeTableB1Values(participant)
+    return participant
 
 def writeTableB1Values(outputDict):
     # Manually adding file paths for now, will replace with search algorithm
@@ -109,12 +127,14 @@ def writeTableB1Values(outputDict):
     b1VerbalCSV = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\test_1\fixed_all_verbal2_CSVs\verbal2_page_78_fixed.csv"
     b1NonverbalCSV = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\test_1\fixed_all_nonverbal_CSVs\nonverbal_page_78_fixed.csv"
 
-    verbalScores = readTableB1CSV(b1VerbalCSV)
+    verbalRawTotal = outputDict['Raw Verbal Total']
+    verbalScores = readTableB1CSV(b1VerbalCSV, verbalRawTotal)
     outputDict['Standard Verbal'] = verbalScores[0]
     outputDict['90% CI Verbal'] = verbalScores[1]
     outputDict['PR Verbal'] = verbalScores[2]
 
-    nonverbalScores = readTableB1CSV(b1NonverbalCSV)
+    nonverbalRawTotal = outputDict['Raw Nonverbal Total']
+    nonverbalScores = readTableB1CSV(b1NonverbalCSV, nonverbalRawTotal)
     outputDict['Standard Nonverbal'] = nonverbalScores[0]
     outputDict['90% CI Nonverbal'] = nonverbalScores[1]
     outputDict['PR Nonverbal'] = nonverbalScores[2]
@@ -122,7 +142,6 @@ def writeTableB1Values(outputDict):
 def main():
     testUploadedFile = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\input_output_files\example_data.xlsx"
     processUploadedFile(testUploadedFile)
-    buildParticipantResults()
 
 main()
 
