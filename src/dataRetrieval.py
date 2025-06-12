@@ -38,6 +38,12 @@ def separateInterval(rangeVals):
         print(f'[!] separateInterval error: {e}')
         return(None, None)
 
+def findTableB2CSV(ageYears, ageMonths):
+    # Logic to return filePath
+    return 42
+
+def readTableB2CSV(filePath, standScoreSum):
+    
 # Table B.4
 def descriptiveCategory(standScore):
     if standScore <= 69:

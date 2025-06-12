@@ -124,6 +124,8 @@ def writeTableB1Values(outputDict):
     outputDict['90% CI Nonverbal'] = nonverbalScores[1]
     outputDict['PR Nonverbal'] = nonverbalScores[2]
 
+    outputDict['Standard Sum'] = verbalScores[0] + nonverbalScores[0]
+
 def main():
     testUploadedFile = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\input_output_files\example_data.xlsx"
     processUploadedFile(testUploadedFile)
