@@ -24,9 +24,14 @@ from commonImports import *
 
 def processUploadedFile(filePath): 
     # Expecting an Excel file in example_data file format
-    df = pd.read_excel(filePath, engine="openpyxl")
-    print(df.head())
+    rowsAsDicts = createFileDict(filePath)
+    print(rowsAsDicts)
     return 42
+
+def createFileDict(filePath):
+    df = pd.read_excel(filePath, engine="openpyxl", header=1)
+    data = df.to_dict(orient="records")
+    return data
 
 # Table B.4
 def descriptiveCategory(standScore):
