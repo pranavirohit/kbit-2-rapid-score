@@ -17,8 +17,15 @@ Here's what each function does:
     table to be displayed or saved.
 
 '''
+from commonImports import *
 
-def processUploadedFile(app, filePath):
+# Add app parameter to connect to CSAcademy graphics in the future
+# def processUploadedFile(app, filePath):
+
+def processUploadedFile(filePath): 
+    # Expecting an Excel file in example_data file format
+    df = pd.read_excel(filePath, engine="openpyxl")
+    print(df.head())
     return 42
 
 # Table B.4
@@ -70,3 +77,9 @@ def test(func):
     
 def testSignificanceLevel():
 '''
+
+def main():
+    testUploadedFile = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\input_output_files\example_data.xlsx"
+    processUploadedFile(testUploadedFile)
+
+main()
