@@ -77,9 +77,31 @@ def buildParticipantResults(row):
         
         # Table B.2 Values
         'Standard IQ': None, # C4
-        '90% CI IQ': (None, None), # C
+        '90% CI IQ': (None, None), # D3A, D3B
+        'PR IQ': None, # E3C
+
+        # Table B.3 Values
+        'PR Verbal Range': (None, None), # E1A, E1B
+        'PR Nonverbal Range': (None, None), # E2A, E2B
+        'PR IQ Range': (None, None), # E3A, E3B
+
+        # Table B.4 Values
+        'Descriptive Verbal': None, # F1
+        'Descriptive Nonverbal': None, # F2
+        'Descriptive IQ': None, # F3
+
+        # Table B.5 Values
+        'Age Equivalent Verbal': None, # G1
+        'Age Equivalent Nonverbal': None, # G2
+        
+        # Table B.6 Values
+        'Score Difference': None, # H1
+        'Significance Level': None, # H2
+        'Frequency of Occurence': None, # H3
 
     }
+
+
 
 
 # Table B.1
@@ -87,7 +109,6 @@ def buildParticipantResults(row):
 # files, but first need to uploaded validated CSVs to GitHub
 
 def tableB1Values(outputDict):
-    outputDict['Standard Sum'] = 
     return 42
 
 # Some seperation between retrieving verbal/nonverbal values?
@@ -153,7 +174,7 @@ def main():
 
 main()
 
-  '''
+'''
     Formatting for output file, check back on this because there will be
     repeat values
 
@@ -181,4 +202,4 @@ main()
 
 
     }
-    '''
+'''
