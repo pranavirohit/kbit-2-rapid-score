@@ -17,16 +17,19 @@ def readTableB1CSV(filePath, rawScore):
     if not row.empty:
         rowAsDict = row.iloc[0].to_dict()
         standScore = rowAsDict['Standard']
-        confInt = seperateInterval(rowAsDict['ConfidenceInterval'])
+        confInt = separateInterval(rowAsDict['ConfidenceInterval'])
         percentile = rowAsDict['Percentile']
         return standScore, confInt, percentile
     
     else:
         return 'Error', 'Error', 'Error'
 
-def seperateInterval(rangeVals):
-    bounds = [val.strip() for val in rangeVals.split('-')]
-    return (int(bounds[0]), int(bounds[1]))
+def separateInterval(rangeVals):
+    if '-' in rangeVals:
+        bounds = [val.strip() for val in rangeVals.split('-')]
+        return (int(bounds[0]), int(bounds[1]))
+    elif '–' in rangeVals:
+        return ('Did not substitute - correctly', None)
 
 # Table B.4
 def descriptiveCategory(standScore):
@@ -74,4 +77,8 @@ def significanceLevel(ageYears, verbalScore, nonverbalScore):
 
 
 @test
-def testSignificanceLevel():
+def testSeparateInterval():
+    assert separateInterval('123 - 157') == (123, 157)
+    assert separateInterval()
+
+# def testSignificanceLevel():
