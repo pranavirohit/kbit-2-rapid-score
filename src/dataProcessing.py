@@ -28,6 +28,7 @@ def processUploadedFile(filePath):
     for row in rowsAsDicts:
         participant = buildParticipantResults(row)
         print(participant)
+        pprint(participant, sort_dicts=False, width=100)
     return 42
 
 def createFileDict(filePath):
@@ -148,6 +149,7 @@ def writeTableB4Values(outputDict):
     standVerbal = outputDict['Standard Verbal']
     standNonverbal = outputDict['Standard Nonverbal']
 
+    # Descriptive Verbal, Descriptive Nonverbal
     outputDict['Descriptive Verbal'] = processedTableB4CSV(standVerbal)
     outputDict['Descriptive Nonverbal'] =  processedTableB4CSV(standNonverbal)
 

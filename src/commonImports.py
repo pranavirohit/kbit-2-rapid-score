@@ -9,6 +9,7 @@ import shutil
 from PIL import Image as PILImage
 from cmu_graphics import* # CMU graphics
 from pdf2image import convert_from_path #PDF2Image
+from pprint import pprint
 
 from imageProcessingFunctions import (
     processPDF,
