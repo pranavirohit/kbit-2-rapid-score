@@ -581,7 +581,7 @@ This worked!
 ### Table B.2
 This also worked! However, important to note that the percentile ranks are 
 still formatted as strings, given that >99.9 and <0.1 are possible values and
-contain non-numeric characters
+contain non-numeric characters.
 {
   'Participant ID': 101,
   'Age (Years)': 4,

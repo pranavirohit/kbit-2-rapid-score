@@ -67,7 +67,7 @@ def findRowByScoreRange(df, score, rangeColumn):
                 return row.to_dict()
 
 # Table B.4
-def descriptiveCategory(standScore):
+def processedTableB4CSV(standScore):
     if standScore <= 69:
         return 'Lower extreme'
     elif 70 <= standScore <= 84:
