@@ -66,53 +66,36 @@ def buildParticipantResults(row):
         # Rank
         'Standard Verbal': None, # C1
         '90% CI Verbal': (None, None), # D1A, D1B
-        'PR Verbal': None, # C
+        'PR Verbal': None, # E1C
+
+        # Table B.1 Values (Nonverbal)
+        'Standard Nonverbal': None, # C2
+        '90% CI Nonverbal': (None, None), # D2A, D2B
+        'PR Nonverbal': None, # E2C
+
+        'Standard Sum': None, # C3 = C1 + C2
         
-        'Standard Score': None,
-        '90% Confidence Interval': None,
-        'Percentile Rank': None,
-        'Descriptive Category': None,
-        'Age Equivalent': None,
-
-        # Nonverbal Results
-
-
-
+        # Table B.2 Values
+        'Standard IQ': None, # C4
+        '90% CI IQ': (None, None), # C
 
     }
 
-    '''
-    Formatting for output file, check back on this because there will be
-    repeat values
 
-    participant = {
-        'Participant ID': id,
-        'Age (Years)': ageYears,
-        'Age (Months)': ageMonths,
-
-        # Scoring Information
-        'Verbal Knowledge': verbalKnowledgeRaw,
-        'Riddles': riddlesRaw,
-        'Matrices': matricesRaw,
-
-        # Verbal Results
-        'Total Raw Scores': verbalKnowledgeRaw + riddlesRaw,
-        'Standard Score': None,
-        '90% Confidence Interval': None,
-        'Percentile Rank': None,
-        'Descriptive Category': None,
-        'Age Equivalent': None,
-
-        # Nonverbal Results
-
-
-
-
-    }
-    '''
 # Table B.1
 # Will need to add a file directory searching mechanism to access the correct
 # files, but first need to uploaded validated CSVs to GitHub
+
+def tableB1Values(outputDict):
+    outputDict['Standard Sum'] = 
+    return 42
+
+# Some seperation between retrieving verbal/nonverbal values?
+def tableB1Nonverbal():
+    return 42
+
+def tableB1Verbal():
+    return 42
 
 # Table B.4
 def descriptiveCategory(standScore):
@@ -169,3 +152,33 @@ def main():
     processUploadedFile(testUploadedFile)
 
 main()
+
+  '''
+    Formatting for output file, check back on this because there will be
+    repeat values
+
+    participant = {
+        'Participant ID': id,
+        'Age (Years)': ageYears,
+        'Age (Months)': ageMonths,
+
+        # Scoring Information
+        'Verbal Knowledge': verbalKnowledgeRaw,
+        'Riddles': riddlesRaw,
+        'Matrices': matricesRaw,
+
+        # Verbal Results
+        'Total Raw Scores': verbalKnowledgeRaw + riddlesRaw,
+        'Standard Score': None,
+        '90% Confidence Interval': None,
+        'Percentile Rank': None,
+        'Descriptive Category': None,
+        'Age Equivalent': None,
+
+        # Nonverbal Results
+
+
+
+
+    }
+    '''
