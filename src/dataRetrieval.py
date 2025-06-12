@@ -83,8 +83,7 @@ def processedTableB4CSV(standScore):
         return 'Error'
 
 # Table B.6
-def significanceLevel(ageYears, verbalScore, nonverbalScore):
-    difference = verbalScore - nonverbalScore
+def processedTableB6CSV(ageYears, difference):
     significanceValues = {
         (4, 4): (17, 21),
         (5, 10): (15, 18),

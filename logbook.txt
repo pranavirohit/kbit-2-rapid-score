@@ -613,3 +613,42 @@ contain non-numeric characters.
   'Significance Level': None,
   'Frequency of Occurence': None
 }
+
+### Table B.4
+Also worked! Considering changing case for descriptive category to every word
+capitalized, instead of the current sentence case
+{
+  'Participant ID': 101,
+  'Age (Years)': 4,
+  'Age (Months)': 1,
+  'Verbal Knowledge': 12,
+  'Riddles': 11,
+  'Matrices': 15,
+  'Raw Verbal Total': 23,
+  'Raw Nonverbal Total': 15,
+  'Standard Verbal': 110,
+  '90% CI Verbal': (101, 118),
+  'PR Verbal': '75',
+  'Standard Nonverbal': 118,
+  '90% CI Nonverbal': (105, 127),
+  'PR Nonverbal': '88',
+  'Standard Sum': 228,
+  'Standard IQ': 117,
+  '90% CI IQ': (109, 123),
+  'PR IQ': '87',
+  'PR Verbal Range': (None, None),
+  'PR Nonverbal Range': (None, None),
+  'PR IQ Range': (None, None),
+
+  # Changes to the next two rows
+  'Descriptive Verbal': 'Average',
+  'Descriptive Nonverbal': 'Above average',
+
+  'Descriptive IQ': None,
+  'Age Equivalent Verbal': None,
+  'Age Equivalent Nonverbal': None,
+  'Score Difference': None,
+  'Significance Level': None,
+  'Frequency of Occurence': None
+}
+

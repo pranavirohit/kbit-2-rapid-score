@@ -66,7 +66,7 @@ from dataRetrieval import (
     readTableB2CSV,
     findRowByScoreRange,
     processedTableB4CSV,
-    significanceLevel,
+    processedTableB6CSV,
 )
 
 def test(func):
