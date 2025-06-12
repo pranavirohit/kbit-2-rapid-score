@@ -25,7 +25,7 @@ from commonImports import *
 def processUploadedFile(filePath): 
     # Expecting an Excel file in example_data file format
     rowsAsDicts = createFileDict(filePath)
-    print(rowsAsDicts)
+    buildParticipantResults(rowsAsDicts)
     return 42
 
 def createFileDict(filePath):
@@ -101,9 +101,28 @@ def buildParticipantResults(row):
 
     }
 
+    writeTableB1Values(participant)
+
+def writeTableB1Values(outputDict):
+    # Manually adding file paths for now, will replace with search algorithm
+    # in the future
+    b1VerbalCSV = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\test_1\fixed_all_verbal2_CSVs\verbal2_page_78_fixed.csv"
+    b1NonverbalCSV = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\test_1\fixed_all_nonverbal_CSVs\nonverbal_page_78_fixed.csv"
+
+    verbalScores = readTableB1CSV(b1VerbalCSV)
+    outputDict['Standard Verbal'] = verbalScores[0]
+    outputDict['90% CI Verbal'] = verbalScores[1]
+    outputDict['PR Verbal'] = verbalScores[2]
+
+    nonverbalScores = readTableB1CSV(b1NonverbalCSV)
+    outputDict['Standard Nonverbal'] = nonverbalScores[0]
+    outputDict['90% CI Nonverbal'] = nonverbalScores[1]
+    outputDict['PR Nonverbal'] = nonverbalScores[2]
+
 def main():
     testUploadedFile = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\input_output_files\example_data.xlsx"
     processUploadedFile(testUploadedFile)
+    buildParticipantResults()
 
 main()
 

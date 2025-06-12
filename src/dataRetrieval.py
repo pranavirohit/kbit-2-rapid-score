@@ -95,5 +95,4 @@ def testSeparateInterval():
     assert separateInterval('- 160') == (None, None)
     assert separateInterval('abc - xyz') == (None, None)
 
-
 # def testSignificanceLevel():

@@ -64,6 +64,8 @@ from dataProcessing import (
 )
 
 from dataRetrieval import (
+    readTableB1CSV,
+    separateInterval,
     descriptiveCategory,
     significanceLevel,
 )
