@@ -59,6 +59,14 @@ def buildParticipantResults(row):
 
         # Total Raw Scores
         'Raw Verbal Total': verbalKnowledgeRaw + riddlesRaw, # B1 = A1 + A2
+        'Raw Nonverbal Total': matricesRaw, # B2 = A3
+
+        # Table B.1 Values (Verbal)
+        # 90% CI represents 90% Confidence Interval, PR represents Percentile
+        # Rank
+        'Standard Verbal': None, # C1
+        '90% CI Verbal': (None, None), # D1A, D1B
+        'PR Verbal': None, # C
         
         'Standard Score': None,
         '90% Confidence Interval': None,
@@ -102,7 +110,9 @@ def buildParticipantResults(row):
 
     }
     '''
-
+# Table B.1
+# Will need to add a file directory searching mechanism to access the correct
+# files, but first need to uploaded validated CSVs to GitHub
 
 # Table B.4
 def descriptiveCategory(standScore):
