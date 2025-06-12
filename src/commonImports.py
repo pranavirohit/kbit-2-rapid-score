@@ -63,6 +63,7 @@ from screenHelpers import (
 from dataRetrieval import (
     readTableB1CSV,
     separateInterval,
+    readTableB2CSV,
     descriptiveCategory,
     significanceLevel,
 )

@@ -42,8 +42,24 @@ def findTableB2CSV(ageYears, ageMonths):
     # Logic to return filePath
     return 42
 
-def readTableB2CSV(filePath, standScoreSum):
+def readTableB2CSV(standScoreSum):
+    # Change to config.py setup later or relative file paths
+    filePath = r"C:\Users\pkroh\OneDrive\Documents\GitHub\kbit-2-rapid-score\data\tables\iq_composite_page_1.csv"
+    df = pd.read_csv(filePath)
+    row = df[df['SumofStandardScores'] == standScoreSum]
     
+    if not row.empty:
+        rowAsDict = row.iloc[0].to_dict()
+        # Changed parameters, since CSV file headings changed from Table B.1 to
+        # Table B.2
+        standScore = rowAsDict['StandScore']
+        confInt = separateInterval(rowAsDict['90ConfInt'])
+        percentile = rowAsDict['PercentileRank']
+        return standScore, confInt, percentile
+    
+    else:
+        return 'Error', 'Error', 'Error'
+
 # Table B.4
 def descriptiveCategory(standScore):
     if standScore <= 69:

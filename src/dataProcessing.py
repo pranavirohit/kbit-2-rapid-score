@@ -104,6 +104,8 @@ def buildParticipantResults(row):
     }
 
     writeTableB1Values(participant)
+    writeTableB2Values(participant)
+    
     return participant
 
 def writeTableB1Values(outputDict):
@@ -114,17 +116,30 @@ def writeTableB1Values(outputDict):
 
     verbalRawTotal = outputDict['Raw Verbal Total']
     verbalScores = readTableB1CSV(b1VerbalCSV, verbalRawTotal)
+
+    # Standard Verbal, 90% CI Verbal, PR Verbal
     outputDict['Standard Verbal'] = verbalScores[0]
     outputDict['90% CI Verbal'] = verbalScores[1]
     outputDict['PR Verbal'] = verbalScores[2]
 
     nonverbalRawTotal = outputDict['Raw Nonverbal Total']
     nonverbalScores = readTableB1CSV(b1NonverbalCSV, nonverbalRawTotal)
+
+    # Standard Nonverbal, 90% CI Nonverbal, PR Nonverbal
     outputDict['Standard Nonverbal'] = nonverbalScores[0]
     outputDict['90% CI Nonverbal'] = nonverbalScores[1]
     outputDict['PR Nonverbal'] = nonverbalScores[2]
 
+    # Standard Sum
     outputDict['Standard Sum'] = verbalScores[0] + nonverbalScores[0]
+
+def writeTableB2Values(outputDict):
+    standScoreSum = outputDict['Standard Sum']
+    iqScores = readTableB2CSV(standScoreSum)
+
+    outputDict['Standard IQ'] = iqScores[0]
+    outputDict['90% CI IQ'] = iqScores[1]
+    outputDict['PR IQ'] = iqScores[2]
 
 def main():
     testUploadedFile = r"C:\Users\pkroh\OneDrive - andrew.cmu.edu\2024-25\Research\KBIT-2 Rapid Score\input_output_files\example_data.xlsx"
