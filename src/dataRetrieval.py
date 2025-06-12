@@ -6,12 +6,32 @@ ADD ALL UPDATED FUNCTIONS TO COMMON IMPORTS ONCE DONE
 # Will need to add a file directory searching mechanism to access the correct
 # files, but first need to uploaded validated CSVs to GitHub
 
-def tableB1Values(outputDict):
+def findTableB1CSV(ageYears, ageMonths):
+    # Logic to return filePath
     return 42
 
 # Some seperation between retrieving verbal/nonverbal values?
-def tableB1Nonverbal():
-    return 42
+def tableB1Nonverbal(filePath, nonverbalRaw):
+    b1Nonverbal = df = pd.read_csv(filePath)
+    row = df[df['Raw'] == ]
+
+def readTableB1CSV(filePath, rawScore):
+    df = pd.read_csv(filePath)
+    row = df[df['Raw'] == rawScore]
+    
+    if not row.empty:
+        rowAsDict = row.iloc[0].to_dict()
+        standScore = rowAsDict['Standard']
+        confInt = seperateInterval(rowAsDict['ConfidenceInterval'])
+        percentile = rowAsDict['Percentile']
+        return standScore, confInt, percentile
+    
+    else:
+        return 'Error', 'Error', 'Error'
+
+def seperateInterval(rangeVals):
+    
+
 
 def tableB1Verbal():
     return 42
