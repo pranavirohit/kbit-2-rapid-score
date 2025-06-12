@@ -35,21 +35,6 @@ def createFileDict(filePath):
     data = df.to_dict(orient="records")
     return data
 
-def readTableB1CSV(filePath, rawScore):
-    df = pd.read_csv(filePath)
-    row = df[df['Raw'] == rawScore]
-    
-    if not row.empty:
-        rowAsDict = row.iloc[0].to_dict()
-        standScore = rowAsDict['Standard']
-        confInt = separateInterval(rowAsDict['ConfidenceInterval'])
-        percentile = rowAsDict['Percentile']
-        return standScore, confInt, percentile
-    
-    else:
-        return 'Error', 'Error', 'Error'
-
-
 def buildParticipantResults(row):
     # Expecting a dictionary with the parameters of the input file, reads in
     # five values directly

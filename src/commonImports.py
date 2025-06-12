@@ -57,6 +57,9 @@ from screenHelpers import (
     clickButtons
 )
 
+# Order of import statements matter, must add dataRetrieval.py functions prior 
+# to calling ANY dataProcessing.py functions
+
 from dataRetrieval import (
     readTableB1CSV,
     separateInterval,
