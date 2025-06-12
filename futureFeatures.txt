@@ -1,0 +1,3 @@
+# Wednesday, June 4th
+- Option to choose between years:age and seperate years and age values for
+Age Equivalent values (ex. 8:9 or both values in seperate columns)

@@ -455,9 +455,6 @@ present
 1. Update dataExtractionFunctions.py to create CSVs for all tables, troubleshoot
 CSV generation for missing files
 
-Verbal (Part 2):
-2. 
-
 # Wednesday, June 6th
 
 ## To-Do
@@ -534,3 +531,13 @@ exactly
 2. Standardize returning of error and exception functions
 3. Decide variable naming, choose between upper and upperBound, or lower and
 lowerBound
+
+# Thursday, June 11th
+
+## To-Do
+1. Generate Table B.3, Table B.5 CSVs
+2. Load Table B.2 CSV through Pandas
+3. Create variables and data structure to store each data value through the
+scoring pipeline
+4. Choose fixed Table B.1 CSV to use, manually retrieve values from CSV through
+Pandas
