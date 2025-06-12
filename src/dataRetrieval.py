@@ -82,10 +82,18 @@ def significanceLevel(ageYears, verbalScore, nonverbalScore):
 
 # Add test decorator, learn what test decorators do
 
-
 @test
 def testSeparateInterval():
     assert separateInterval('123 - 157') == (123, 157)
-    assert separateInterval()
+    assert separateInterval('123-157') == (123, 157)
+    assert separateInterval('  45 -  78 ') == (45, 78)
+
+    # Uses endash instead of hyphen
+    assert separateInterval('80 – 120') == (None, None)
+    assert separateInterval('123157') == (None, None)
+    assert separateInterval('150 - ') == (None, None)
+    assert separateInterval('- 160') == (None, None)
+    assert separateInterval('abc - xyz') == (None, None)
+
 
 # def testSignificanceLevel():
